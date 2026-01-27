@@ -1,0 +1,71 @@
+/* Admin Inventory Page Styles */
+
+.admin-inventory-page {
+  min-height: calc(100vh - 60px);
+  background: #f6f7f9;
+}
+
+.inventory-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 2px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+}
+
+.tab-button {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: #1f2937;
+  background: #f9fafb;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tab-button:nth-child(2).active {
+  color: #8b5cf6;
+  border-bottom-color: #8b5cf6;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .inventory-tabs {
+    top: 50px;
+  }
+
+  .tab-button {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}

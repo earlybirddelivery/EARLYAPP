@@ -1,0 +1,51 @@
+// craco.config.js
+const path = require("path");
+require("dotenv").config();
+
+const webpackConfig = {
+  webpack: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+    configure: (webpackConfig) => {
+      // Add ignored patterns to reduce watched directories
+      webpackConfig.watchOptions = {
+        ...webpackConfig.watchOptions,
+        ignored: [
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/build/**',
+          '**/dist/**',
+          '**/coverage/**',
+        ],
+      };
+
+      return webpackConfig;
+    },
+  },
+};
+
+// Setup dev server
+webpackConfig.devServer = (devServerConfig) => {
+  // Configure client options to suppress warnings
+  devServerConfig.client = {
+    overlay: {
+      errors: true,
+      warnings: false,
+      runtimeErrors: true,
+    },
+    logging: 'error',
+    reconnect: 5,
+  };
+
+  // Enable hot reload
+  devServerConfig.hot = true;
+  devServerConfig.liveReload = true;
+  
+  // Keep it simple
+  devServerConfig.port = 3000;
+
+  return devServerConfig;
+};
+
+module.exports = webpackConfig;

@@ -1,0 +1,396 @@
+/* Supplier Management Styles */
+
+.supplier-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.sm-header h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 24px;
+}
+
+.sm-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 20px;
+  border-top: 4px solid #8b5cf6;
+}
+
+.sm-card h3 {
+  margin-top: 0;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.sm-card h4 {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #374151;
+  font-size: 15px;
+}
+
+/* Form Styles */
+.form-card {
+  background: #f8fafc;
+  border-top-color: #10b981;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+  font-size: 13px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Suppliers List */
+.suppliers-list {
+  display: grid;
+  gap: 16px;
+}
+
+.supplier-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all 0.3s;
+}
+
+.supplier-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #8b5cf6;
+}
+
+.supplier-info {
+  flex: 1;
+}
+
+.supplier-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.supplier-header h4 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-badge.suspended {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.supplier-info p {
+  margin: 4px 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.supplier-info .phone,
+.supplier-info .email,
+.supplier-info .address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.supplier-info .products {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.supplier-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Link Card */
+.link-card {
+  background: #f0fdf4;
+  border-top-color: #10b981;
+}
+
+/* Payables Card */
+.payables-card {
+  background: #fef3c7;
+  border-top-color: #f59e0b;
+}
+
+.payables-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: white;
+  border-radius: 6px;
+}
+
+.payable-item {
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.payable-item.highlight {
+  background: #fef3c7;
+  border: 2px solid #f59e0b;
+}
+
+.payable-item span {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.payable-item strong {
+  display: block;
+  font-size: 18px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* SLA Table */
+.sla-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.sla-table th {
+  background: #f3f4f6;
+  color: #1f2937;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.sla-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.sla-table tr.delayed {
+  background: #fee2e2;
+}
+
+.sla-table tr.on-time {
+  background: #d1fae5;
+}
+
+.payables-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #8b5cf6;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #7c3aed;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #059669;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-info {
+  background: #06b6d4;
+  color: white;
+}
+
+.btn-info:hover:not(:disabled) {
+  background: #0891b2;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* Empty State */
+.empty-state,
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sm-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .supplier-item {
+    flex-direction: column;
+  }
+
+  .supplier-actions {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payables-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .sla-table {
+    font-size: 11px;
+  }
+
+  .sla-table th,
+  .sla-table td {
+    padding: 6px;
+  }
+}
