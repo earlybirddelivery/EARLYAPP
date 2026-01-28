@@ -41,24 +41,7 @@
 - 50+ test cases
 - **Revenue Impact: ₹50-100K/month**
 
-**Phase 4A.6 (Gamification): ✅ 100% COMPLETE** 🎮
-- Loyalty points system with 5-tier progression
-- 4 leaderboard types (global, tier, weekly, personal)
-- 15 achievement badges with auto-detection
-- 15+ REST API endpoints
-- 5-tab interactive dashboard
-- **Revenue Impact: ₹10-15K/month**
-
-**Phase 4A.4 (Mobile Apps - Capacitor): ✅ 100% COMPLETE** 📱
-- Capacitor-based cross-platform app (iOS, Android, Web)
-- Single React codebase - 25-33% faster development than React Native
-- 30+ screens and components
-- 20+ API endpoints pre-configured
-- Native features: camera, GPS, notifications, storage
-- Offline-first architecture with sync
-- **Revenue Impact: ₹50-100K/month**
-
-**Documentation Created:** 18,000+ lines across 15 comprehensive reports
+**Documentation Created:** 15,000+ lines across 12 comprehensive reports
 
 **Deployment Status:** ✅ APPROVED FOR IMMEDIATE ROLLOUT
 
@@ -1536,151 +1519,14 @@ GET /api/disputes/customer/{customer_id}
 
 ---
 
-## PHASE 4A.4: Native Mobile Apps (40-60 hours) ✅ 100% COMPLETE
+## PHASE 4A.4: Native Mobile Apps (40-60 hours)
 
-**Status:** ✅ COMPLETE (30 hours invested - 25% faster than estimate!)  
-**Date Completed:** January 28, 2026  
-**Platform:** Capacitor (iOS, Android, Web - Single Codebase)
+**Weeks 6-8**
 
-### Why Capacitor Over React Native?
-✅ Single codebase for 3 platforms (vs separate for each)
-✅ 100% React component reuse from existing frontend
-✅ Faster development (30h vs 40-60h for React Native)
-✅ Web + Mobile from same code
-✅ Native performance with web dev experience
-✅ 25-33% time savings achieved!
-
-### Deliverables: ✅ ALL DELIVERED (30+ Files, 3,500+ Lines)
-
-**Core Application (500 lines):**
-- ✅ React + Capacitor main app with navigation
-- ✅ Vite build configuration (optimized for all platforms)
-- ✅ TypeScript setup for type safety
-- ✅ Global responsive styling
-
-**Services Layer (800 lines):**
-- ✅ CapacitorService.ts - Camera, GPS, storage, notifications wrapper (350 lines)
-- ✅ APIClient.ts - 20+ REST endpoints pre-configured (450 lines)
-
-**State Management (350 lines):**
-- ✅ AuthContext - Login, logout, profile management (150 lines)
-- ✅ StoreContext - Products, cart, orders state (200 lines)
-
-**UI Screens (1,200+ lines):**
-- ✅ LoginScreen - Beautiful auth UI with validation (120 lines + 150 CSS)
-- ✅ HomeScreen - Product grid with categories (100 lines + 250 CSS)
-- ✅ ProductsScreen - Full product catalog (60 lines)
-- ✅ CartScreen - Shopping cart with real-time updates (80 lines)
-- ✅ OrdersScreen - Order history and tracking (80 lines)
-- ✅ ProfileScreen - User profile and settings (100 lines)
-
-**Configuration Files (400 lines):**
-- ✅ capacitor.config.json - iOS/Android configuration
-- ✅ package.json - Dependencies & build scripts
-- ✅ tsconfig.json, vite.config.ts - Build tooling
-- ✅ index.html, manifest.json - PWA setup
-
-**Comprehensive Documentation (1,500+ lines):**
-- ✅ README.md - Quick start guide (250 lines)
-- ✅ PHASE_4A_4_COMPLETE_GUIDE.md - Full technical guide (500+ lines)
-- ✅ PHASE_4A_4_DEPLOYMENT_GUIDE.md - iOS/Android deployment (400+ lines)
-- ✅ PHASE_4A_4_API_REFERENCE.md - API endpoints reference (350+ lines)
-
-### Key Features Implemented:
-
-**Native Capabilities:**
-✅ 📷 Camera - Take photos, pick from gallery
-✅ 📍 GPS Geolocation - Delivery tracking, address selection
-✅ 💾 Local Storage - Offline support, data persistence
-✅ 📲 Push Notifications - Real-time order updates
-✅ 🔔 Haptic Feedback - User interaction feedback
-✅ 📡 Network Detection - Offline/online state handling
-✅ ⌨️ Keyboard Management - Mobile keyboard handling
-✅ 🔋 Status Bar - Native look & feel
-
-**App Features:**
-✅ 🔐 Authentication - Login, signup, JWT tokens
-✅ 🛍️ Product Catalog - Search, filter, browse (1000+ products)
-✅ 🛒 Shopping Cart - Add/remove items, real-time updates
-✅ 📦 Order Management - Create, view, cancel orders
-✅ 👤 User Profile - Edit info, upload photos, manage addresses
-✅ 🎮 Gamification - Loyalty points, leaderboards, achievements
-✅ 📍 Address Management - Multiple addresses, location picker
-✅ 💳 Payment Options - Multiple payment methods
-✅ 🌙 Dark Mode - Automatic light/dark theme
-✅ 📱 Responsive Design - Works on all screen sizes
-
-**Technical Excellence:**
-✅ TypeScript - Full type safety
-✅ React Hooks - Modern React patterns
-✅ Context API - Global state management
-✅ Responsive CSS Grid - Mobile-first design
-✅ Error Handling - Comprehensive error UI
-✅ Accessibility - WCAG AA compliant
-✅ Offline-First - Works without internet
-✅ Performance - <1.2s TTI, 2.5MB bundle
-
-### Performance Metrics: ✅ ALL EXCEEDED
-
-| Metric | Target | Achieved | Status |
-|--------|--------|----------|--------|
-| Bundle Size | <3MB | 2.5MB | ✅ |
-| Time to Interactive | <2s | 1.2s | ✅ |
-| Lighthouse Score | >90 | 95+ | ✅ |
-| API Response | <300ms | <150ms | ✅ |
-| App Start Time | <1s | 800ms | ✅ |
-| FPS (animations) | >60 | 60 | ✅ |
-
-### Platform Support: ✅ COMPLETE
-
-| Platform | Version | Status |
-|----------|---------|--------|
-| iOS | 12.0+ | ✅ Ready |
-| Android | 5.1+ | ✅ Ready |
-| Web | Modern browsers | ✅ Ready |
-
-### API Integration: ✅ 20+ ENDPOINTS
-
-**Configured & Ready:**
-- ✅ Authentication (login, signup, logout)
-- ✅ Products (list, search, filter, details)
-- ✅ Cart (add, remove, update, clear)
-- ✅ Orders (create, list, details, cancel)
-- ✅ Users (profile, addresses, photo upload)
-- ✅ Gamification (dashboard, leaderboards, achievements)
-
-### Deployment Status: ✅ PRODUCTION READY
-
-**Deliverable Files:**
-- ✅ iOS build configuration (Xcode ready)
-- ✅ Android build configuration (Android Studio ready)
-- ✅ Web build (deploy anywhere)
-- ✅ App Store submission guide
-- ✅ Google Play submission guide
-
-**Next Steps:**
-1. App Store submission (1-2 days)
-2. Google Play submission (1-2 days)
-3. Beta testing (1 week)
-4. Production launch (Week 2-3)
-
-### Revenue Impact: ✅ ₹50-100K/MONTH
-
-**Monetization:**
-- Direct Sales (75%): ₹35-70K/month (increased conversion)
-- Engagement Premium (15%): ₹7-15K/month (express delivery)
-- Data Insights (10%): ₹3-8K/month (anonymized analytics)
-
-**Growth Projections:**
-- Month 1: 500 installs, ₹8-10K revenue
-- Month 3: 5,000 installs, ₹40-50K revenue
-- Month 6: 15,000 installs, ₹75-100K revenue
-- Year 1: 50,000 installs, ₹50-100K/month recurring
-
-**Production Ready:** YES ✅
-**Revenue Impact:** ₹50-100K/month
-**Performance:** 1000+ concurrent users, <150ms API latency
-**Next Phase:** 4A.1 (Staff Earnings) or 4B.6 (Access Control)
+- React Native or Flutter app
+- iOS and Android builds
+- API integration
+- Revenue: ₹50-100K/month
 
 ---
 
@@ -2069,170 +1915,22 @@ Features:
 
 ---
 
-## PHASE 4B.6: Access Control System (12-15 hours) ✅ COMPLETE
+## PHASE 4B.6: Advanced Access Control (12-15 hours)
 
-**Status**: ✅ COMPLETE (14 hours invested)
-**Delivery**: Production-ready access control with admin dashboard
+**Weeks 9-10 (Parallel)**
 
-**What Was Delivered**:
-- ✅ PermissionService: Fine-grained RBAC with resource-level control (700+ lines)
-- ✅ TwoFactorAuthService: TOTP + SMS + Backup codes
-- ✅ AuditService: Comprehensive logging + suspicious activity detection
-- ✅ 20+ REST API endpoints (permissions, 2FA, audit, resources)
-- ✅ Admin Dashboard (React): 4 major tabs for full control
-- ✅ Professional CSS styling + dark mode support
-- ✅ Complete API documentation
-- ✅ Integration guide + deployment checklist
+### Objectives:
+- Fine-grained permissions
+- 2FA for sensitive ops
+- Audit trail
+- Resource-level control
 
-**Files Created**:
-1. `backend/access_control_service.py` (700+ lines)
-   - PermissionService, TwoFactorAuthService, AuditService
-   - 30+ methods for access control operations
-   - Comprehensive error handling
-
-2. `backend/routes_access_control.py` (600+ lines)
-   - 20+ REST endpoints
-   - Permission management (grant, revoke, check)
-   - 2FA management (TOTP, SMS, backup codes)
-   - Audit logging and reporting
-   - Resource access control
-
-3. `frontend/src/components/AccessControlDashboard.tsx` (600+ lines)
-   - Permission management interface
-   - 2FA configuration UI
-   - Audit log viewer with filtering
-   - Resource access matrix
-   - Real-time updates
-
-4. `frontend/src/components/AccessControlDashboard.css` (500+ lines)
-   - Responsive design (mobile-first)
-   - Dark mode support
-   - Professional UI/UX
-   - Smooth animations
-
-5. `PHASE_4B_6_COMPLETE_GUIDE.md` (2,000+ lines)
-   - Complete implementation guide
-   - Architecture diagrams
-   - API documentation
-   - Security implementation details
-   - Integration procedures
-   - Testing and deployment
-
-**Key Features**:
-- Default roles: Owner (5), Admin (4), Manager (3), Staff (2), Customer (1)
-- Hierarchical permission system with 5 role levels
-- Resource-scoped permissions (delivery zones, product categories, warehouses)
-- 2FA methods: TOTP (Google Authenticator), SMS (6-digit codes), Backup Codes (10 per user)
-- Audit trail: 20+ action types logged with user, timestamp, resource, and changes
-- Suspicious activity detection (5+ failed logins, multiple IPs, unusual patterns)
-- Admin dashboard with 4 tabs (Permissions, 2FA, Audit, Resources)
-- Permission checking: <100ms response time
-
-**Security Layers**:
-1. JWT authentication with expiry
-2. Permission-based access control
-3. Role hierarchy enforcement
-4. Resource-level scoping
-5. 2FA verification
-6. Comprehensive audit logging
-7. Suspicious activity detection
-8. Rate limiting
-
-**Performance Metrics**:
-- Permission check: <50ms average (target: <100ms) ✅
-- 2FA verification: ~2 seconds (target: <5s) ✅
-- Audit log queries: <200ms (target: <500ms) ✅
-- API uptime: 99.97% (target: 99.95%) ✅
-- Dashboard load time: <2s ✅
-
-**Default Roles & Permissions**:
-```
-Owner (Level 5)
-  └─ All permissions (*)
-
-Admin (Level 4)  
-  ├─ User management (read, update)
-  ├─ Product management (CRUD)
-  ├─ Order management (read, update)
-  ├─ Payment management (read)
-  ├─ Staff management (read, update)
-  ├─ Permission management (read, update)
-  └─ Audit trail (read)
-
-Manager (Level 3)
-  ├─ Order management (read, update)
-  ├─ Delivery management (read, update)
-  ├─ Staff management (read)
-  ├─ Reports (read)
-  └─ Audit trail (read)
-
-Staff (Level 2)
-  ├─ Order management (read)
-  ├─ Delivery management (read, update)
-  └─ Payment management (read)
-
-Customer (Level 1)
-  ├─ Products (read)
-  ├─ Own orders (read)
-  └─ Profile management (read, update)
-```
-
-**API Endpoints** (20+):
-```
-Permissions:
-POST   /api/access/permissions/grant
-POST   /api/access/permissions/revoke
-GET    /api/access/permissions/user/<user_id>
-POST   /api/access/permissions/check
-GET    /api/access/roles
-POST   /api/access/roles/assign
-
-2FA:
-POST   /api/access/2fa/enable/totp
-POST   /api/access/2fa/verify/totp
-POST   /api/access/2fa/send-sms
-POST   /api/access/2fa/verify-sms
-POST   /api/access/2fa/disable
-
-Audit:
-GET    /api/access/audit/user/<user_id>
-GET    /api/access/audit/resource/<type>/<id>
-GET    /api/access/audit/summary
-GET    /api/access/audit/suspicious/<user_id>
-
-Resources:
-POST   /api/access/resources/access/grant
-POST   /api/access/resources/access/revoke
-GET    /api/access/resources/user-access
-```
-
-**Database Collections**:
-- permissions (user permissions with timestamps)
-- roles (role definitions with permission sets)
-- resource_access (resource-level access grants)
-- mfa_settings (user MFA configuration)
-- backup_codes (hashed backup codes)
-- mfa_challenges (active 2FA challenges)
-- audit_logs (complete audit trail)
-
-**Testing Coverage**:
-- Unit tests: Permission, 2FA, Audit services
-- Integration tests: Permission enforcement
-- API tests: All 20+ endpoints
-- Security tests: Access denial scenarios
-- Performance tests: Query speed benchmarks
-
-**Revenue Impact**:
-- Enterprise Security: +₹2-3K/month (2FA enforcement)
-- Multi-User Management: +₹1-2K/month (unlimited roles)
-- Compliance & Audit: +₹1-2K/month (reporting)
-- Advanced Access Control: +₹0.5-1K/month (custom rules)
-- Premium Admin Tools: +₹0.5-1K/month (dashboards)
-- **Total: ₹5-10K/month**
-
-**Deployment Status**: ✅ PRODUCTION READY
-**Documentation**: ✅ COMPLETE
-**Next Phase**: Phase 4A.1 (Staff Earnings) or Phase 5 (Testing & Deployment)
+**Deliverable:**
+- Backend: Permission service
+- Frontend: Permission UI
+- Database: Permissions, audit
+- Revenue: ₹5-10K/month
+- Time: 12-15 hours
 
 ---
 
@@ -2360,86 +2058,14 @@ GET    /api/access/resources/user-access
 
 ---
 
-## PHASE 5: TESTING & DEPLOYMENT (40 HOURS) - 🟢 80% COMPLETE
-
-**Timeline: WEEKS 11-12**
-
-**Status:** 🟢 80% COMPLETE - Infrastructure Ready, Deployment Pending
-
-**Completed Components:**
-
-1. ✅ **Test Suite** (600+ lines)
-   - 7 test classes with 30+ tests
-   - Coverage: All Phase 4 features
-   - Performance benchmarks
-   - File: `backend/test_phase5_integration.py`
-
-2. ✅ **CI/CD Pipeline** (394 lines)
-   - GitHub Actions workflows
-   - Automated testing on push
-   - Docker image building
-   - Automated deployment gates
-   - File: `.github/workflows/ci-cd-pipeline.yml`
-
-3. ✅ **Docker Setup** (Complete)
-   - Development: 7 containers
-   - Production: 7 containers + monitoring
-   - Files: `docker-compose.yml`, `docker-compose.prod.yml`
-
-4. ✅ **Database Migrations** (380+ lines)
-   - Access control migration
-   - Payment tracking migration
-   - Gamification migration
-   - Mobile app migration
-   - File: `backend/migrate_database.py`
-
-5. ✅ **Makefile** (400+ lines)
-   - 50+ automation commands
-   - Testing, building, deployment
-   - File: `Makefile`
-
-6. ✅ **Monitoring Setup** (Complete)
-   - Prometheus configuration (85 lines)
-   - Alert rules (300 lines)
-   - AlertManager configuration (170 lines)
-   - 27 alert conditions
-   - Files: `prometheus.yml`, `alert_rules.yml`, `alertmanager.yml`
-
-7. ✅ **Deployment Guide** (741+ lines)
-   - Pre-deployment checklist
-   - Staging procedures
-   - Production procedures
-   - Rollback procedures
-   - File: `PHASE_5_DEPLOYMENT_GUIDE.md`
-
-8. ✅ **Implementation Status** (500+ lines)
-   - Phase 5 progress documentation
-   - Files: `PHASE_5_IMPLEMENTATION_STATUS.md`
-
-**Total Files Created**: 10 files, 2,500+ lines  
-**Total Infrastructure**: Production-ready  
-
-**Remaining Tasks:**
-- Execute staging deployment
-- Run integration tests against staging
-- Perform load testing
-- Final security audit
-- Production deployment
-
 ## PHASE 5 SUMMARY
 
-| Component | Status | Hours |
-|-----------|--------|-------|
-| Test Suite | ✅ Complete | 4 |
-| CI/CD Setup | ✅ Complete | 3 |
-| Docker Config | ✅ Complete | 4 |
-| Migrations | ✅ Complete | 3 |
-| Monitoring | ✅ Complete | 4 |
-| Makefile | ✅ Complete | 2 |
-| Documentation | ✅ Complete | 3 |
-| Staging Deploy | 🔄 In Progress | 6 |
-| Prod Deploy | ⏳ Pending | 8 |
-| **PHASE 5 TOTAL** | **🟢 80%** | **40h** |
+| Task | Hours | Team |
+|------|-------|------|
+| Integration Tests | 10 | QA |
+| Production Deploy | 15 | DevOps |
+| Post-Deploy Monitor | 15 | All |
+| **PHASE 5 TOTAL** | **40** | **4 devs** |
 
 ---
 
