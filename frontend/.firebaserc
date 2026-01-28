@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "earlybird-kirana"
-  }
+    "default": "earlybird-delivery-ap"
+  },
+  "targets": {},
+  "etags": {}
 }
