@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from models import *
 from database import db
 from auth import require_role, get_current_user
+from notification_service import notification_service
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -20,6 +21,7 @@ async def create_order(order: OrderCreate, current_user: dict = Depends(require_
     order_doc = {
         "id": str(uuid.uuid4()),
         "user_id": current_user["id"],
+        "customer_id": current_user["id"],  # PHASE 0.4: Link to customer
         "order_type": OrderType.ONE_TIME,
         "subscription_id": None,
         "items": [item.model_dump() for item in order.items],
@@ -31,10 +33,30 @@ async def create_order(order: OrderCreate, current_user: dict = Depends(require_
         "delivery_boy_id": None,
         "notes": order.notes,
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "delivered_at": None
+        "delivered_at": None,
+        "billed": False,  # PHASE 0.4.1: Initialize as not billed
+        "delivery_confirmed": False,  # PHASE 0.4.2: Initialize as not confirmed
+        "billed_at": None,
+        "billed_month": None
     }
     
     await db.orders.insert_one(order_doc)
+    
+    # Send WhatsApp order confirmation notification
+    try:
+        user = await db.users.find_one({"id": current_user["id"]}, {"_id": 0})
+        if user and user.get("phone_number"):
+            await notification_service.send_order_confirmation(
+                phone=user["phone_number"],
+                order_id=order_doc["id"],
+                delivery_date=order_doc["delivery_date"],
+                total_amount=total_amount,
+                reference_id=order_doc["id"]
+            )
+    except Exception as e:
+        # Log error but don't fail the order creation
+        print(f"WhatsApp notification failed for order {order_doc['id']}: {str(e)}")
+    
     return order_doc
 
 @router.get("/", response_model=List[Order])

@@ -1,32 +1,26 @@
-"""
-Migration 001: Add subscription_id to db.orders
+# ==================================================================================
+# MIGRATION 001: Add subscription_id to db.orders
+# ==================================================================================
+# Purpose: Link one-time orders to subscriptions (foreign key)
+# Status: Handles both new records and existing orphaned one-time orders
+# Rollback: Safely removes field without data loss
+# ==================================================================================
 
-PURPOSE:
-- Add subscription_id field to all orders documents
-- This field links one-time orders to subscriptions when applicable
-- For true one-time orders, subscription_id remains null
-- Enables billing system to properly include all orders
-
-CHANGES:
-- Add subscription_id field to db.orders schema (optional, nullable)
-- Set default value to null for existing orders
-- Create index on subscription_id for query performance
-
-NOTES:
-- This migration is SAFE to run in production
-- Adds new field without modifying existing data
-- No data loss or breaking changes
-- Can be rolled back if needed
-"""
+from datetime import datetime
 
 
 async def up(db):
-    """Apply migration: Add subscription_id field to orders"""
+    """
+    Add subscription_id field to all orders.
+    This enables linking between one-time orders and their parent subscriptions.
+    
+    For existing one-time orders: subscription_id will be NULL
+    For new orders: will be set when order is part of a subscription
+    """
     print("Migration 001: Adding subscription_id to db.orders...")
     
     try:
-        # Add subscription_id field to all existing orders
-        # Only updates documents that don't have the field
+        # Add field to all existing documents
         result = await db.orders.update_many(
             {"subscription_id": {"$exists": False}},
             {"$set": {"subscription_id": None}}

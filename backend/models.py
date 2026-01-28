@@ -195,6 +195,7 @@ class Order(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str
     user_id: str
+    customer_id: str  # PHASE 0.4: Link to customer_v2
     order_type: OrderType
     subscription_id: Optional[str] = None
     items: List[OrderItem]
@@ -207,6 +208,10 @@ class Order(BaseModel):
     notes: Optional[str] = None
     created_at: datetime
     delivered_at: Optional[datetime] = None
+    billed: bool = False  # PHASE 0.4.4: Billing flag
+    delivery_confirmed: bool = False  # PHASE 0.4.3: Delivery confirmation flag
+    billed_at: Optional[datetime] = None  # PHASE 0.4.4: When billed
+    billed_month: Optional[str] = None  # PHASE 0.4.4: Month billed for (YYYY-MM)
 
 class OrderCreate(BaseModel):
     items: List[OrderItem]
@@ -375,3 +380,159 @@ class DeliveryBoyStats(BaseModel):
     completed: int
     pending: int
     cash_collected: float
+
+# PHASE 4B.2: STAFF WALLET MODELS
+# ========================================
+
+class BonusType(str, Enum):
+    ON_TIME = "on_time"  # 5% bonus if >95% on-time
+    RATING = "rating"  # ₹10 per star rating >4.5
+    COMPLETION = "completion"  # Bonus for completing targets
+    PERFORMANCE = "performance"  # Performance-based bonus
+
+class DeductionType(str, Enum):
+    COMPLAINT = "complaint"  # -₹50 per complaint
+    DAMAGE = "damage"  # Damage to goods
+    LATE_RETURN = "late_return"  # Late return of equipment
+    DISCIPLINARY = "disciplinary"  # Disciplinary action
+
+class PayoutStatus(str, Enum):
+    REQUESTED = "requested"
+    APPROVED = "approved"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+class PaymentMethod(str, Enum):
+    BANK_TRANSFER = "bank_transfer"
+    UPI = "upi"
+    WALLET = "wallet"
+    CASH = "cash"
+
+# Daily Earnings Record
+class DailyEarnings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    staff_id: str
+    date: date
+    deliveries_completed: int
+    delivery_amount: float  # Base amount for deliveries
+    bonus_amount: float  # Total bonuses earned
+    deductions_amount: float  # Total deductions
+    net_earnings: float  # delivery_amount + bonus - deductions
+    rating: float  # Average rating for the day
+    on_time_percentage: float  # % of on-time deliveries
+    complaints: int
+    created_at: datetime
+    updated_at: datetime
+
+# Bonus Record
+class Bonus(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    staff_id: str
+    earnings_id: str  # Links to DailyEarnings
+    bonus_type: BonusType
+    amount: float
+    reason: str
+    created_at: datetime
+
+# Deduction Record
+class Deduction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    staff_id: str
+    earnings_id: str  # Links to DailyEarnings
+    deduction_type: DeductionType
+    amount: float
+    reason: str
+    reference_id: Optional[str] = None  # Complaint ID, etc.
+    created_at: datetime
+
+# Monthly Statement
+class MonthlyStatement(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    staff_id: str
+    month: str  # YYYY-MM
+    total_deliveries: int
+    base_earnings: float
+    total_bonuses: float
+    total_deductions: float
+    net_earnings: float
+    average_rating: float
+    on_time_percentage: float
+    complaints_count: int
+    created_at: datetime
+
+# Payout Request
+class PayoutRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    staff_id: str
+    amount: float
+    payment_method: PaymentMethod
+    status: PayoutStatus
+    bank_details: Optional[Dict[str, Any]] = None
+    upi_id: Optional[str] = None
+    notes: Optional[str] = None
+    requested_at: datetime
+    approved_at: Optional[datetime] = None
+    approved_by: Optional[str] = None  # Admin ID
+    processed_at: Optional[datetime] = None
+    failure_reason: Optional[str] = None
+    reference_id: Optional[str] = None  # Payment gateway reference
+
+# Staff Wallet Summary
+class StaffWalletSummary(BaseModel):
+    staff_id: str
+    name: str
+    phone: str
+    today_earnings: float
+    month_earnings: float
+    pending_payout: float
+    lifetime_earnings: float
+    average_rating: float
+    on_time_percentage: float
+    total_deliveries: int
+    pending_requests: int
+    last_payout_date: Optional[date] = None
+
+# Request/Response Models
+class DailyEarningsCreate(BaseModel):
+    staff_id: str
+    date: date
+    deliveries_completed: int
+    delivery_amount: float
+    rating: float
+    on_time_percentage: float
+    complaints: int
+
+class PayoutRequestCreate(BaseModel):
+    amount: float
+    payment_method: PaymentMethod
+    bank_details: Optional[Dict[str, Any]] = None
+    upi_id: Optional[str] = None
+    notes: Optional[str] = None
+
+class PayoutRequestUpdate(BaseModel):
+    status: PayoutStatus
+    approved_by: Optional[str] = None
+    failure_reason: Optional[str] = None
+    reference_id: Optional[str] = None
+
+class BonusApply(BaseModel):
+    staff_id: str
+    earnings_id: str
+    bonus_type: BonusType
+    amount: float
+    reason: str
+
+class DeductionApply(BaseModel):
+    staff_id: str
+    earnings_id: str
+    deduction_type: DeductionType
+    amount: float
+    reason: str
+    reference_id: Optional[str] = None

@@ -6,6 +6,10 @@ from models_phase0_updated import *
 from database import db
 from auth import get_current_user
 from subscription_engine_v2 import subscription_engine
+from delivery_validators import (
+    validate_delivery_date, validate_quantities, calculate_delivery_status,
+    prepare_audit_trail, validate_order_status, validate_role
+)
 
 router = APIRouter(prefix="/delivery-boy", tags=["Delivery Boy"])
 
@@ -183,48 +187,19 @@ async def mark_delivered(
 ):
     """Mark a customer delivery as delivered"""
     
-    if current_user.get("role") != "delivery_boy":
-        raise HTTPException(status_code=403, detail="Delivery boy access only")
+    # STEP 24: Validate role
+    validate_role(current_user, ["delivery_boy"])
     
     delivery_boy_id = current_user.get("id")
     
     # STEP 20: Validate order_id exists in db.orders
     order = await db.orders.find_one({"id": update.order_id}, {"_id": 0})
-    if not order:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Order {update.order_id} not found. Cannot mark delivery without valid order."
-        )
-    
-    # STEP 22: Validate order is not CANCELLED
-    if order.get("status") == "CANCELLED":
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot mark delivery for a cancelled order"
-        )
+    validate_order_status(order)
     
     # STEP 27: Validate delivery date
-    from datetime import date
-    delivery_date_obj = datetime.strptime(update.delivery_date, "%Y-%m-%d").date()
-    today = date.today()
-    
-    # Check 1: No future dates
-    if delivery_date_obj > today:
-        raise HTTPException(
-            status_code=400,
-            detail="Delivery date cannot be in the future"
-        )
-    
-    # Check 2: Within order window (±1 day from order delivery date)
-    order_delivery_date_obj = datetime.strptime(order.get("delivery_date", update.delivery_date), "%Y-%m-%d").date()
-    date_diff = abs((delivery_date_obj - order_delivery_date_obj).days)
-    if date_diff > 1:
-        window_start = order_delivery_date_obj - timedelta(days=1)
-        window_end = order_delivery_date_obj + timedelta(days=1)
-        raise HTTPException(
-            status_code=400,
-            detail=f"Delivery date outside order window ({window_start.strftime('%b %d')} to {window_end.strftime('%b %d')})"
-        )
+    valid, error = validate_delivery_date(update.delivery_date, order.get("delivery_date", update.delivery_date))
+    if not valid:
+        raise HTTPException(status_code=400, detail=error)
     
     # Create or update delivery status
     existing = await db.delivery_statuses.find_one({
@@ -236,12 +211,11 @@ async def mark_delivered(
     now_iso = datetime.now().isoformat()
     
     # STEP 25: Prepare audit trail fields for delivery boy confirmation
-    audit_fields = {
-        "confirmed_by_user_id": delivery_boy_id,
-        "confirmed_by_name": current_user.get("name", "Unknown"),
-        "confirmed_at": now_iso,
-        "confirmation_method": "delivery_boy"
-    }
+    audit_fields = prepare_audit_trail(
+        user_id=delivery_boy_id,
+        username=current_user.get("name", "Unknown"),
+        confirmation_method="delivery_boy"
+    )
     
     if existing:
         await db.delivery_statuses.update_one(

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(ls:*)",
+      "Bash(python -m http.server:*)",
+      "Read(//c/Users/xiaomi/Downloads/earlybird/**)",
+      "Bash(start login.html)",
+      "Bash(start demo_viewer.html)",
+      "Bash(start test_data_loader.html)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
+    ]
+  }
+}

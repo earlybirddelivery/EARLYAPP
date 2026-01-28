@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarlyBird Support - Support Buddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/subscription-integration.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🌅</div>
+                    <div class="logo-text">
+                        <h1>EarlyBird</h1>
+                        <p>Support Buddy</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active" data-page="calendar" onclick="showPage('calendar')">
+                    <span class="nav-icon">📅</span>
+                    <span>Calendar</span>
+                </div>
+                <div class="nav-item" data-page="dashboard" onclick="showPage('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="mycustomers" onclick="showPage('mycustomers')">
+                    <span class="nav-icon">👥</span>
+                    <span>My Customers</span>
+                </div>
+                <div class="nav-item" data-page="subscriptions" onclick="showPage('subscriptions')">
+                    <span class="nav-icon">🔄</span>
+                    <span>Subscriptions & Orders</span>
+                </div>
+                <div class="nav-item" data-page="wallet" onclick="showPage('wallet')">
+                    <span class="nav-icon">💰</span>
+                    <span>My Wallet</span>
+                </div>
+                <div class="nav-item" data-page="earnings" onclick="showPage('earnings')">
+                    <span class="nav-icon">📊</span>
+                    <span>Earnings</span>
+                </div>
+                <div class="nav-item" data-page="shareaccess" onclick="showPage('shareaccess'); supportShareUI.init()">
+                    <span class="nav-icon">👥</span>
+                    <span>Share Access</span>
+                </div>
+                <div style="margin: 12px 20px; height: 1px; background: var(--border);"></div>
+                <div style="padding: 12px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-tertiary);">Phase 3 Tools</div>
+                <div class="nav-item" data-page="voiceOrder" onclick="showPage('voiceOrder'); phase3UI.initVoiceOrderUI()">
+                    <span class="nav-icon">🎤</span>
+                    <span>Voice Order</span>
+                </div>
+                <div class="nav-item" data-page="ocr" onclick="showPage('ocr'); phase3UI.initOCRUI()">
+                    <span class="nav-icon">📸</span>
+                    <span>OCR Upload</span>
+                </div>
+                <div class="nav-item" data-page="smartFeatures" onclick="showPage('smartFeatures'); phase3UI.initSmartFeaturesUI()">
+                    <span class="nav-icon">✨</span>
+                    <span>Smart Features</span>
+                </div>
+                <div class="nav-item" data-page="analytics" onclick="showPage('analytics'); phase3UI.initAnalyticsUI()">
+                    <span class="nav-icon">📈</span>
+                    <span>Analytics</span>
+                </div>
+            </nav>
+
+            <div style="padding: 20px; border-top: 1px solid var(--border); margin-top: auto;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                    <div style="font-size: 12px; opacity: 0.9; margin-bottom: 4px;">My Earnings</div>
+                    <div style="font-size: 24px; font-weight: 700;">₹5,450</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="location.href='index.html'">
+                    🏠 Switch Role
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Calendar Page -->
+            <div id="calendarPage" class="page-content">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>📅 My Calendar</h2>
+                        <p>Calendar filtered to your assigned customers only</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="supportPortalUI.openCreateOrderModal('calendar')">
+                        ➕ Create Order
+                    </button>
+                </div>
+
+                <div class="heat-map-legend">
+                    <span class="legend-title">My Customer Activities</span>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--heat-low);"></div>
+                            <span>Low activity</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--heat-medium);"></div>
+                            <span>Medium activity</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--heat-high);"></div>
+                            <span>High activity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calendar-layout">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <h3 class="calendar-month-title" id="calendarMonthTitle"></h3>
+                            <div class="calendar-nav">
+                                <button onclick="changeMonth(-1)">◀ Previous</button>
+                                <button onclick="changeMonth(0)">Today</button>
+                                <button onclick="changeMonth(1)">Next ▶</button>
+                            </div>
+                        </div>
+                        <div id="calendarGrid"></div>
+                    </div>
+                    
+                    <div class="date-detail-view" id="dateDetailView">
+                        <!-- Date details will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page-content" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>📊 Support Dashboard</h2>
+                        <p>Subscription-focused performance metrics (85% recurring revenue)</p>
+                    </div>
+                </div>
+                
+                <!-- Revenue Model Focus -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div style="padding: 16px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 12px; border-left: 4px solid var(--primary);">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">🔄 SUBSCRIPTIONS (Primary Focus)</div>
+                        <div style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Customer Recurring Revenue</div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">Help customers set up subscriptions</div>
+                    </div>
+                    <div style="padding: 16px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.1) 100%); border-radius: 12px; border-left: 4px solid #4caf50;">
+                        <div style="font-size: 12px; font-weight: 700; color: #2e7d32; margin-bottom: 4px;">📦 ORDERS (Secondary)</div>
+                        <div style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">One-Time Purchases</div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">Create orders when needed</div>
+                    </div>
+                </div>
+                
+                <!-- Pause Detection Alerts -->
+                <div id="pauseAlertsSection" class="card" style="margin-bottom: 20px; display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 style="margin: 0;">🚨 Subscription Alerts (HIGH PRIORITY)</h3>
+                        <button class="btn btn-sm" onclick="supportPortalUI.refreshPauseAlerts()" style="padding: 6px 12px; font-size: 12px;">🔄 Refresh</button>
+                    </div>
+                    <div id="pauseAlertsList">
+                        <!-- Populated by supportPortalUI.loadPauseAlerts() -->
+                    </div>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-label">My Customers</div>
+                        <div class="stat-value">87</div>
+                        <div class="stat-change">+5 this month</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Customer Subscriptions</div>
+                        <div class="stat-value">142</div>
+                        <div class="stat-change">+12% (PRIMARY)</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-label">Orders Created Today</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change">Target: 15/day</div>
+                    </div>
+                    <div class="stat-card secondary">
+                        <div class="stat-label">Today's Commission</div>
+                        <div class="stat-value">₹340</div>
+                        <div class="stat-change">~₹289 from subscriptions</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Pages (Placeholders) -->
+            <div id="mycustomersPage" class="page-content" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>👥 My Customers</h2>
+                        <p id="customersCount">Loading customers...</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="supportPortalUI.loadMyCustomers()">🔄 Refresh</button>
+                </div>
+                <div id="customersList" class="card">
+                    <p style="text-align: center; color: var(--text-secondary);">Loading customer data...</p>
+                </div>
+            </div>
+
+            <div id="subscriptionsPage" class="page-content" style="display: none;">
+                <!-- Tab Navigation -->
+                <div style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 0;">
+                    <button class="btn-tab active" onclick="switchSubscriptionTab('subscriptions')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-secondary); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; flex-shrink: 0;" id="tab-subscriptions">
+                        🔄 Subscriptions (Primary)
+                    </button>
+                    <button class="btn-tab" onclick="switchSubscriptionTab('orders')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-secondary); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; flex-shrink: 0;" id="tab-orders">
+                        📦 Create Order (Ad-hoc)
+                    </button>
+                </div>
+
+                <!-- SUBSCRIPTIONS TAB (PRIMARY) -->
+                <div id="subscriptionsTabContent" style="display: block;">
+                    <div class="page-header">
+                        <div class="page-header-left">
+                            <h2>🔄 Manage Customer Subscriptions</h2>
+                            <p>View and manage subscriptions for your customers (Recurring Revenue)</p>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-primary" onclick="subscriptionIntegration.showCreateSubscriptionModal()">
+                                🔄 NEW Subscription
+                            </button>
+                            <button class="btn btn-success" onclick="subscriptionIntegration.showCreateOrderModal()">
+                                📦 NEW Order
+                            </button>
+                        </div>
+                    </div>
+                    <div id="supportSubscriptionsList" class="card">
+                        <p style="text-align: center; color: var(--text-secondary);">Select a customer to view subscriptions or create new ones</p>
+                    </div>
+                </div>
+
+                <!-- ORDERS TAB (SECONDARY) -->
+                <div id="ordersTabContent" style="display: none;">
+                    <div class="page-header">
+                        <div class="page-header-left">
+                            <h2>📦 Create Order for Customer</h2>
+                            <p>Quick order creation on behalf of your customer (Ad-hoc Orders)</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="subscriptionIntegration.showCreateOrderModal()">
+                            📦 NEW Order
+                        </button>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 16px;">Quick Order Entry</h3>
+                        <form onsubmit="event.preventDefault(); subscriptionIntegration.submitCreateOrder();" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items: flex-end;">
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px;">Product *</label>
+                                <select id="orderProductId" required style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px;">
+                                    <option value="">Select Product</option>
+                                    <option value="MILK_500ML">Milk 500ML - ₹30</option>
+                                    <option value="MILK_1L">Milk 1L - ₹50</option>
+                                    <option value="CURD_500G">Curd 500G - ₹25</option>
+                                    <option value="BUTTER_200G">Butter 200G - ₹100</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px;">Quantity *</label>
+                                <input type="number" id="orderQuantity" required min="1" value="1" style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px;">Delivery Date *</label>
+                                <input type="date" id="orderDeliveryDate" required style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px;">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Create Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="walletPage" class="page-content" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>💰 My Wallet - Real-Time Earnings</h2>
+                        <p>Commission tracking, withdrawal requests, and payment history</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="requestWithdrawal()">💸 Withdraw Earnings</button>
+                </div>
+
+                <!-- Wallet Cards -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 12px; opacity: 0.9; margin-bottom: 4px;">Available Balance</div>
+                        <div id="walletBalance" style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">₹0</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Instant withdrawal available</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #F77F00 0%, #DC6803 100%); color: white; padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 12px; opacity: 0.9; margin-bottom: 4px;">Pending Withdrawal</div>
+                        <div id="walletPending" style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">₹0</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Processing</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%); color: white; padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 12px; opacity: 0.9; margin-bottom: 4px;">Total Earnings</div>
+                        <div id="walletTotal" style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">₹0</div>
+                        <div style="font-size: 12px; opacity: 0.8;">All-time earnings</div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 20px;">
+                    <h3 style="margin-top: 0;">Recent Transactions</h3>
+                    <table id="walletTransactions" style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid #eee;">
+                            <tr>
+                                <th style="text-align: left; padding: 12px;">Date</th>
+                                <th style="text-align: left; padding: 12px;">Type</th>
+                                <th style="text-align: left; padding: 12px;">Amount</th>
+                                <th style="text-align: left; padding: 12px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="walletTransactionsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="earningsPage" class="page-content" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>📊 My Earnings Breakdown</h2>
+                        <p>Commission sources, daily/weekly/monthly breakdown, and leaderboard</p>
+                    </div>
+                </div>
+
+                <!-- Earnings Stats -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Today</div>
+                        <div id="earningToday" style="font-size: 24px; font-weight: 700; color: #667eea;">₹0</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">This Week</div>
+                        <div id="earningWeekly" style="font-size: 24px; font-weight: 700; color: #F77F00;">₹0</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">This Month</div>
+                        <div id="earningMonthly" style="font-size: 24px; font-weight: 700; color: #66BB6A;">₹0</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Your Rank</div>
+                        <div id="leaderboardRank" style="font-size: 24px; font-weight: 700; color: #764ba2;">--</div>
+                    </div>
+                </div>
+
+                <!-- Commission Breakdown -->
+                <div style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0;">Commission Sources</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 1px solid #eee;">
+                            <tr>
+                                <th style="text-align: left; padding: 12px;">Commission Type</th>
+                                <th style="text-align: right; padding: 12px;">Amount Per</th>
+                                <th style="text-align: right; padding: 12px;">This Month Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px;">📦 Order Commission</td>
+                                <td style="text-align: right; padding: 12px;">₹50</td>
+                                <td style="text-align: right; padding: 12px; font-weight: 600; color: #667eea;">₹2,500</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px;">🔄 Subscription Conversion</td>
+                                <td style="text-align: right; padding: 12px;">₹200</td>
+                                <td style="text-align: right; padding: 12px; font-weight: 600; color: #F77F00;">₹1,200</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px;">👥 Referral Bonus</td>
+                                <td style="text-align: right; padding: 12px;">₹500</td>
+                                <td style="text-align: right; padding: 12px; font-weight: 600; color: #66BB6A;">₹1,000</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; font-weight: 700;">🏆 Performance Bonus</td>
+                                <td style="text-align: right; padding: 12px;">Tiered</td>
+                                <td style="text-align: right; padding: 12px; font-weight: 600; color: #764ba2;">₹750</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Leaderboard -->
+                <div style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 20px;">
+                    <h3 style="margin-top: 0;">🏆 Monthly Leaderboard</h3>
+                    <table id="leaderboardTable" style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 1px solid #eee;">
+                            <tr>
+                                <th style="text-align: center; padding: 12px;">Rank</th>
+                                <th style="text-align: left; padding: 12px;">Name</th>
+                                <th style="text-align: right; padding: 12px;">Orders</th>
+                                <th style="text-align: right; padding: 12px;">This Month</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Share Access Page (Task 7) -->
+            <div id="shareaccessPage" class="page-content" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h2>👥 Share Account Access</h2>
+                        <p>Invite customers to share account access and collaborate</p>
+                    </div>
+                </div>
+
+                <!-- Quick Invite Section -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">📬 Send Invitation</h3>
+                    <div style="display: grid; gap: 12px; grid-template-columns: 1fr 150px;">
+                        <input 
+                            id="inviteCustomerId" 
+                            placeholder="Enter Customer ID (e.g., CUST_001)" 
+                            type="text"
+                            style="padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">
+                        <button class="btn btn-primary" onclick="supportShareUI.sendInvitation()">
+                            📤 Send Invite
+                        </button>
+                    </div>
+                    <div id="inviteMessage" style="margin-top: 12px; display: none; padding: 12px; border-radius: 8px; font-size: 14px;"></div>
+                </div>
+
+                <!-- Recent Customers Section -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">🔄 Shared Access Status</h3>
+                    <div id="sharedStatusList" style="display: grid; gap: 12px;">
+                        <!-- Populated by supportShareUI.loadSharedAccounts() -->
+                    </div>
+                </div>
+
+                <!-- Information Section -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">ℹ️ How It Works</h3>
+                    <div style="display: grid; gap: 12px; font-size: 14px; color: var(--text-secondary);">
+                        <div style="padding: 12px; background: var(--light); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">1️⃣ Send Invitation</div>
+                            <div>Enter customer ID and click Send Invite. Invitation code is generated.</div>
+                        </div>
+                        <div style="padding: 12px; background: var(--light); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">2️⃣ Customer Accepts</div>
+                            <div>Customer receives invitation link via WhatsApp. They click to accept.</div>
+                        </div>
+                        <div style="padding: 12px; background: var(--light); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">3️⃣ Shared Access Active</div>
+                            <div>You can now create/update orders. Customer sees everything in real-time.</div>
+                        </div>
+                        <div style="padding: 12px; background: var(--light); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">4️⃣ Full Audit Trail</div>
+                            <div>Every action is logged with who, what, when, where. Complete transparency.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Your Permissions -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">✅ Your Permissions as Support Buddy</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 8px;">
+                        <li style="padding: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: var(--success); font-weight: 700;">✓</span>
+                            Read all customer orders
+                        </li>
+                        <li style="padding: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: var(--success); font-weight: 700;">✓</span>
+                            Create and update orders
+                        </li>
+                        <li style="padding: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: var(--success); font-weight: 700;">✓</span>
+                            Approve/reject payments
+                        </li>
+                        <li style="padding: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: var(--success); font-weight: 700;">✓</span>
+                            View financial data
+                        </li>
+                        <li style="padding: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: var(--text-secondary);">✗</span>
+                            Cannot revoke own access
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 3: Voice Order Page -->
+            <div id="voiceOrderPage" class="page-content" style="display: none;"></div>
+
+            <!-- Phase 3: OCR Upload Page -->
+            <div id="ocrPage" class="page-content" style="display: none;"></div>
+
+            <!-- Phase 3: Smart Features Page -->
+            <div id="smartFeaturesPage" class="page-content" style="display: none;"></div>
+
+            <!-- Phase 3: Analytics Page -->
+            <div id="analyticsPage" class="page-content" style="display: none;"></div>
+        </main>
+    </div>
+
+    <!-- Phase 1-2: Core Modules -->
+    <script src="../../backend/utils.js"></script>
+    <script src="../../backend/subscription.js"></script>
+    <script src="../../backend/orders.js"></script>
+    <script src="../../backend/delivery.js"></script>
+    <script src="../../backend/wallet.js"></script>
+    <script src="../../backend/calendar.js"></script>
+
+    <!-- Access Control (Role-based filtering) -->
+    <script src="../../backend/access-control.js"></script>
+
+    <!-- Shared Access (Multi-user collaboration with audit trail) -->
+    <script src="../../backend/shared-access.js"></script>
+
+    <!-- Phase 4: Critical Gaps Implementation -->
+    <script src="../../backend/payment-links.js"></script>
+    <script src="../../backend/staff-wallet.js"></script>
+    <script src="../../backend/supplier.js"></script>
+    <script src="../../backend/pause-detection.js"></script>
+    <script src="../../backend/demand-forecast.js"></script>
+
+    <!-- Backend Processors -->
+    <script src="../../backend/voice-processor.js"></script>
+    <script src="../../backend/ocr-processor.js"></script>
+    
+    <!-- Phase 3: Intelligent Input & Smart Features -->
+    <script src="../features/voice.js"></script>
+    <script src="../features/image-ocr.js"></script>
+    <script src="../features/smart-features.js"></script>
+
+    <!-- Phase 3: Supplier Integration & Analytics -->
+    <script src="../features/supplier.js"></script>
+    <script src="../features/analytics.js"></script>
+
+    <!-- Phase 3: Frontend UI Controller -->
+    <script src="../features/phase3-ui.js"></script>
+
+    <script>
+        // ============================================
+        // Support Portal UI Controller
+        // ============================================
+        const supportPortalUI = {
+            state: {
+                supportBuddyId: localStorage.getItem('supportBuddyId') || 'SB001',
+                today: new Date().toISOString().split('T')[0]
+            },
+
+            init() {
+                // Set up access control for Support role
+                EarlyBirdAccessControl.setCurrentUser({
+                    id: this.state.supportBuddyId,
+                    name: 'Support Buddy',
+                    role: 'support',
+                    assignedCustomers: ['C001', 'C002', 'C003', 'C004', 'C005'] // These 5 customers are assigned to this support buddy
+                });
+                
+                // Update UI based on role
+                EarlyBirdAccessControl.updateUIForRole();
+                
+                // Initialize calendar with filtering
+                if (typeof EarlyBirdCalendar !== 'undefined') {
+                    EarlyBirdCalendar.init('calendarGrid', 'dateDetailView', 'support');
+                }
+                
+                // Load pause detection alerts
+                this.loadPauseAlerts();
+            },
+            
+            loadPauseAlerts() {
+                if (typeof EarlyBirdPauseDetection === 'undefined') {
+                    return;
+                }
+                
+                try {
+                    const pauseDetection = new EarlyBirdPauseDetection();
+                    const alerts = pauseDetection.getUnacknowledgedAlerts();
+                    
+                    // Filter alerts for this support buddy's customers
+                    const myCustomerIds = this.getMyCustomerIds();
+                    const myAlerts = alerts.filter(alert => myCustomerIds.includes(alert.customerId));
+                    
+                    if (myAlerts.length === 0) {
+                        const section = document.getElementById('pauseAlertsSection');
+                        if (section) section.style.display = 'none';
+                        return;
+                    }
+                    
+                    const section = document.getElementById('pauseAlertsSection');
+                    if (section) section.style.display = 'block';
+                    
+                    let html = '';
+                    myAlerts.slice(0, 10).forEach(alert => {
+                        const severityColor = alert.alertType === 'admin_escalation' ? '#F44336' :
+                                            alert.alertType === 'churn_risk' ? '#FF9800' : '#2196F3';
+                        
+                        html += `
+                            <div style="padding: 12px; background: ${severityColor}10; border-left: 4px solid ${severityColor}; border-radius: 6px; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                    <div>
+                                        <div style="font-weight: 600; color: ${severityColor}; margin-bottom: 4px;">${alert.message}</div>
+                                        <div style="font-size: 12px; color: #666;">Customer: ${alert.customerId}</div>
+                                    </div>
+                                    <button onclick="supportPortalUI.acknowledgeAlert('${alert.alertId}')" 
+                                        style="padding: 4px 8px; background: ${severityColor}; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                        ✓ Acknowledge
+                                    </button>
+                                </div>
+                                <div style="font-size: 11px; color: #999;">${new Date(alert.createdAt).toLocaleString()}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    const listEl = document.getElementById('pauseAlertsList');
+                    if (listEl) listEl.innerHTML = html;
+                } catch (error) {
+                    console.error('Error loading pause alerts:', error);
+                }
+            },
+            
+            acknowledgeAlert(alertId) {
+                if (typeof EarlyBirdPauseDetection === 'undefined') return;
+                
+                try {
+                    const pauseDetection = new EarlyBirdPauseDetection();
+                    const currentUser = EarlyBirdAuth.getCurrentUser();
+                    pauseDetection.acknowledgeAlert(alertId, currentUser.userId || currentUser.id);
+                    
+                    EarlyBirdUtils.showToast('Alert acknowledged', 'success');
+                    this.loadPauseAlerts();
+                } catch (error) {
+                    console.error('Error acknowledging alert:', error);
+                    EarlyBirdUtils.showToast('Error acknowledging alert', 'error');
+                }
+            },
+            
+            refreshPauseAlerts() {
+                this.loadPauseAlerts();
+            },
+            
+            getMyCustomerIds() {
+                // Get customer IDs assigned to this support buddy
+                const assigned = EarlyBirdAccessControl.getCurrentUser()?.assignedCustomers || [];
+                return assigned;
+            },
+
+            loadMyCustomers() {
+                // Load mock customers (in production, these would be customers assigned to this support buddy)
+                const mockCustomers = [
+                    { id: 'C001', name: 'Ramesh Kumar', phone: '9876543210', orders: 12, lastOrder: '2025-01-15' },
+                    { id: 'C002', name: 'Priya Singh', phone: '9876543211', orders: 8, lastOrder: '2025-01-14' },
+                    { id: 'C003', name: 'Amit Patel', phone: '9876543212', orders: 15, lastOrder: '2025-01-10' },
+                    { id: 'C004', name: 'Neha Gupta', phone: '9876543213', orders: 5, lastOrder: '2025-01-09' },
+                    { id: 'C005', name: 'Vikram Rao', phone: '9876543214', orders: 20, lastOrder: '2025-01-18' }
+                ];
+
+                document.getElementById('customersCount').textContent = `${mockCustomers.length} customers assigned`;
+                this.renderCustomersTable(mockCustomers);
+
+                // Populate select dropdown
+                const select = document.getElementById('supportCustomerSelect');
+                select.innerHTML = '<option value="">Select a customer...</option>';
+                mockCustomers.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name + ' - ' + c.phone;
+                    select.appendChild(opt);
+                });
+            },
+
+            renderCustomersTable(customers) {
+                const container = document.getElementById('customersList');
+                let html = `
+                    <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: var(--light); border-bottom: 2px solid var(--border);">
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Customer Name</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Phone</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Total Orders</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Last Order</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                customers.forEach(customer => {
+                    html += `
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 12px;">${customer.name}</td>
+                            <td style="padding: 12px;">${customer.phone}</td>
+                            <td style="padding: 12px;">${customer.orders}</td>
+                            <td style="padding: 12px;">${customer.lastOrder}</td>
+                            <td style="padding: 12px;">
+                                <button class="btn btn-sm" style="padding: 4px 8px; font-size: 12px;" 
+                                    onclick="supportPortalUI.createOrderFor('${customer.id}', '${customer.name}')">Create Order</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            },
+
+            createOrderFor(customerId, customerName) {
+                // Set customer in the create order form
+                document.getElementById('supportCustomerSelect').value = customerId;
+                showPage('createorder');
+                EarlyBirdUtils.showToast(`Creating order for ${customerName}`, 'info');
+            },
+
+            openCreateOrderModal(method) {
+                const customerId = document.getElementById('supportCustomerSelect').value;
+                const orderDate = document.getElementById('supportOrderDate').value;
+
+                if (!customerId || !orderDate) {
+                    Toast.error('Please select customer and order date', 'Required');
+                    return;
+                }
+
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+                    <div class="modal-dialog" style="max-width: 600px;">
+                        <div class="modal-header">
+                            <h2>➕ Create Order (Text Entry)</h2>
+                            <button onclick="this.closest('.modal-overlay').remove()" style="background: none; border: none; font-size: 20px; cursor: pointer;">✕</button>
+                        </div>
+                        <div class="modal-body" style="padding: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Products & Quantities</label>
+                            <textarea id="orderItems" placeholder="Example:\\nMilk 500ml - 2\\nBread - 1\\nEggs 6pc - 1" 
+                                style="width: 100%; height: 120px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px; font-family: monospace; font-size: 13px;"></textarea>
+
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Delivery Slot</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                                <button class="slot-btn" data-slot="am" style="padding: 10px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                    🌅 Morning (6-8 AM)
+                                </button>
+                                <button class="slot-btn" data-slot="pm" style="padding: 10px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                    🌤️ Evening (4-6 PM)
+                                </button>
+                            </div>
+
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Notes</label>
+                            <input type="text" id="orderNotes" placeholder="Special instructions..." 
+                                style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px;">
+
+                            <div style="display: flex; gap: 12px;">
+                                <button class="btn btn-primary" style="flex: 1;" 
+                                    onclick="supportPortalUI.submitOrder()">✓ Create Order</button>
+                                <button class="btn btn-outline" style="flex: 1;" 
+                                    onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Slot selection
+                modal.querySelectorAll('.slot-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        modal.querySelectorAll('.slot-btn').forEach(b => b.style.borderColor = 'var(--border)');
+                        this.style.borderColor = 'var(--primary)';
+                    });
+                });
+            },
+
+            submitOrder() {
+                const customerId = document.getElementById('supportCustomerSelect').value;
+                const orderDate = document.getElementById('supportOrderDate').value;
+                const notes = document.getElementById('orderNotes').value;
+
+                if (!customerId || !orderDate) {
+                    Toast.error('Missing customer or date', 'Required');
+                    return;
+                }
+
+                EarlyBirdUtils.showToast('Order created successfully', 'success');
+                document.querySelector('.modal-overlay').remove();
+                document.getElementById('supportOrderDate').value = '';
+                document.getElementById('supportCustomerSelect').value = '';
+            },
+            
+            openVoiceOrder() {
+                // Check if customer is selected
+                const customerId = document.getElementById('supportCustomerSelect').value;
+                if (!customerId) {
+                    EarlyBirdUtils.showToast('Please select a customer first', 'warning');
+                    return;
+                }
+                
+                // Show voice order page
+                showPage('voiceOrder');
+                
+                // Initialize voice UI if available
+                if (typeof phase3UI !== 'undefined' && phase3UI.initVoiceOrderUI) {
+                    phase3UI.initVoiceOrderUI();
+                }
+                
+                // Store customer context for order creation
+                if (typeof EarlyBirdVoice !== 'undefined') {
+                    EarlyBirdVoice.state.selectedCustomerId = customerId;
+                }
+            },
+            
+            openOCRUpload() {
+                // Check if customer is selected
+                const customerId = document.getElementById('supportCustomerSelect').value;
+                if (!customerId) {
+                    EarlyBirdUtils.showToast('Please select a customer first', 'warning');
+                    return;
+                }
+                
+                // Show OCR page
+                showPage('ocr');
+                
+                // Initialize OCR UI if available
+                if (typeof phase3UI !== 'undefined' && phase3UI.initOCRUI) {
+                    phase3UI.initOCRUI();
+                }
+                
+                // Store customer context for order creation
+                if (typeof EarlyBirdOCR !== 'undefined') {
+                    EarlyBirdOCR.state.selectedCustomerId = customerId;
+                }
+            }
+        };
+
+        // Support Share Access UI Controller (Task 7)
+        const supportShareUI = {
+            supportId: 'SUP_001',
+            supportName: 'Raj Kumar',
+            supportPhone: '+91-9876543210',
+
+            init() {
+                this.loadSharedAccounts();
+            },
+
+            sendInvitation() {
+                const customerId = document.getElementById('inviteCustomerId').value.trim();
+                
+                if (!customerId) {
+                    this.showMessage('Please enter a customer ID', 'error');
+                    return;
+                }
+
+                const sharedAccess = new EarlyBirdSharedAccess();
+                
+                try {
+                    const invitation = sharedAccess.createInvitation(
+                        customerId,
+                        'support',
+                        {
+                            id: this.supportId,
+                            name: this.supportName,
+                            phone: this.supportPhone
+                        }
+                    );
+
+                    this.showMessage(
+                        `✅ Invitation sent! Code: ${invitation.invitationCode}\n` +
+                        `Expires: ${new Date(invitation.expiresAt).toLocaleDateString()}\n` +
+                        `Share: earlybird.app/accept/${invitation.invitationCode}`,
+                        'success'
+                    );
+
+                    // Clear input
+                    document.getElementById('inviteCustomerId').value = '';
+                    
+                    // Refresh list
+                    setTimeout(() => this.loadSharedAccounts(), 500);
+                } catch (error) {
+                    this.showMessage(`❌ Error: ${error.message}`, 'error');
+                }
+            },
+
+            loadSharedAccounts() {
+                const sharedAccess = new EarlyBirdSharedAccess();
+                const container = document.getElementById('sharedStatusList');
+
+                // For demo, show status for assigned customers
+                const assignedCustomers = ['CUST_001', 'CUST_002', 'CUST_003', 'CUST_004', 'CUST_005'];
+                
+                let html = '';
+                assignedCustomers.forEach(customerId => {
+                    const config = sharedAccess.getSharedAccountConfig(customerId);
+                    const isShared = config !== null;
+                    const status = isShared ? '✅ Active' : '⏳ Pending';
+                    const statusColor = isShared ? 'var(--success)' : 'var(--text-tertiary)';
+
+                    html += `
+                        <div style="padding: 16px; background: var(--light); border-radius: 8px; border-left: 4px solid ${statusColor}; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600;">${customerId}</div>
+                                <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                                    ${isShared ? `Shared since ${new Date(config.createdAt).toLocaleDateString()}` : 'No shared access yet'}
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 12px; color: ${statusColor}; font-weight: 700;">${status}</div>
+                                ${isShared ? `<div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">${config.activeSessions.length} active</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            showMessage(message, type) {
+                const messageDiv = document.getElementById('inviteMessage');
+                messageDiv.style.display = 'block';
+                messageDiv.style.background = type === 'success' ? '#f0fdf4' : '#fef2f2';
+                messageDiv.style.color = type === 'success' ? '#166534' : '#991b1b';
+                messageDiv.style.borderLeft = `4px solid ${type === 'success' ? 'var(--success)' : 'var(--error)'}`;
+                messageDiv.innerHTML = message;
+
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize all systems
+            EarlyBirdStaffWallet.init();
+            EarlyBirdPaymentLinks.init();
+            EarlyBirdSupplier.init();
+            
+            // Initialize access control and role-based filtering
+            supportPortalUI.init();
+            
+            // Create staff wallet if not exists
+            const staffId = localStorage.getItem('currentStaff') || 'STAFF_001';
+            const staffName = localStorage.getItem('currentStaffName') || 'Support Buddy';
+            EarlyBirdStaffWallet.createStaffWallet(staffId, staffName, 'support_buddy', '+919999999999');
+            
+            // Initialize UI
+            document.getElementById('supportOrderDate').valueAsDate = new Date();
+            
+            console.log('✅ Support Buddy Portal initialized with role-based access control');
+        });
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            const page = document.getElementById(pageId + 'Page');
+            if (page) {
+                page.style.display = 'block';
+            }
+            
+            setActiveNav(pageId);
+            
+            if (pageId === 'calendar') {
+                setTimeout(() => {
+                    initCalendar();
+                }, 100);
+            } else if (pageId === 'mycustomers') {
+                supportPortalUI.loadMyCustomers();
+            } else if (pageId === 'wallet') {
+                updateStaffWalletUI();
+            } else if (pageId === 'earnings') {
+                updateEarningsUI();
+            }
+        }
+
+        // ========== STAFF WALLET UI ==========
+        function updateStaffWalletUI() {
+            const staffId = localStorage.getItem('currentStaff') || 'STAFF_001';
+            const dashboard = EarlyBirdStaffWallet.getStaffDashboard(staffId);
+
+            if (!dashboard) return;
+
+            // Update cards
+            document.getElementById('walletBalance').textContent = `₹${dashboard.balance}`;
+            document.getElementById('walletPending').textContent = `₹${dashboard.pendingWithdrawal}`;
+            document.getElementById('walletTotal').textContent = `₹${dashboard.earnings.lifetime}`;
+
+            // Update transactions table
+            const tbody = document.getElementById('walletTransactionsBody');
+            tbody.innerHTML = dashboard.recentTransactions.slice(-10).reverse().map(txn => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">${new Date(txn.timestamp).toLocaleDateString()}</td>
+                    <td style="padding: 12px;">${txn.type.replace('_', ' ')}</td>
+                    <td style="padding: 12px; font-weight: 600;">₹${txn.amount}</td>
+                    <td style="padding: 12px;">
+                        <span style="background: ${txn.status === 'completed' ? '#C8E6C9' : '#FFF9C4'}; padding: 4px 8px; border-radius: 4px; font-size: 11px;">
+                            ${txn.status.toUpperCase()}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateEarningsUI() {
+            const staffId = localStorage.getItem('currentStaff') || 'STAFF_001';
+            const dashboard = EarlyBirdStaffWallet.getStaffDashboard(staffId);
+
+            if (!dashboard) return;
+
+            // Update earning stats
+            document.getElementById('earningToday').textContent = `₹${dashboard.earnings.today}`;
+            document.getElementById('earningWeekly').textContent = `₹${dashboard.earnings.thisWeek}`;
+            document.getElementById('earningMonthly').textContent = `₹${dashboard.earnings.thisMonth}`;
+            
+            if (dashboard.leaderboardPosition) {
+                document.getElementById('leaderboardRank').textContent = `#${dashboard.leaderboardPosition.position}/${dashboard.leaderboardPosition.outOf}`;
+            }
+
+            // Update leaderboard
+            const leaderboard = EarlyBirdStaffWallet.getLeaderboard('support_buddy');
+            const tbody = document.getElementById('leaderboardBody');
+            tbody.innerHTML = leaderboard.slice(0, 10).map((leader, idx) => `
+                <tr style="border-bottom: 1px solid #eee; ${leader.staffId === staffId ? 'background: #F5F5F5; font-weight: 600;' : ''}">
+                    <td style="text-align: center; padding: 12px;">
+                        ${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
+                    </td>
+                    <td style="padding: 12px;">${leader.name}</td>
+                    <td style="text-align: right; padding: 12px;">${leader.orderCount}</td>
+                    <td style="text-align: right; padding: 12px; font-weight: 700; color: #667eea;">₹${leader.monthlyEarnings}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Tab switching for subscriptions/orders
+        function switchSubscriptionTab(tabName) {
+            const subscriptionsTab = document.getElementById('subscriptionsTabContent');
+            const ordersTab = document.getElementById('ordersTabContent');
+            const subscriptionsBtn = document.getElementById('tab-subscriptions');
+            const ordersBtn = document.getElementById('tab-orders');
+            
+            if (tabName === 'subscriptions') {
+                subscriptionsTab.style.display = 'block';
+                ordersTab.style.display = 'none';
+                subscriptionsBtn.classList.add('active');
+                ordersBtn.classList.remove('active');
+                subscriptionsBtn.style.borderBottomColor = 'var(--primary)';
+                subscriptionsBtn.style.color = 'var(--primary)';
+                ordersBtn.style.borderBottomColor = 'transparent';
+                ordersBtn.style.color = 'var(--text-secondary)';
+            } else if (tabName === 'orders') {
+                ordersTab.style.display = 'block';
+                subscriptionsTab.style.display = 'none';
+                ordersBtn.classList.add('active');
+                subscriptionsBtn.classList.remove('active');
+                ordersBtn.style.borderBottomColor = 'var(--primary)';
+                ordersBtn.style.color = 'var(--primary)';
+                subscriptionsBtn.style.borderBottomColor = 'transparent';
+                subscriptionsBtn.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function requestWithdrawal() {
+            const staffId = localStorage.getItem('currentStaff') || 'STAFF_001';
+            const wallet = EarlyBirdStaffWallet.getStaffWallet(staffId);
+
+            if (!wallet || wallet.balance < 100) {
+                Toast.warning('Minimum withdrawal: ₹100', 'Amount Limit');
+                return;
+            }
+
+            const amount = prompt('Enter withdrawal amount:', wallet.balance);
+            if (!amount) return;
+
+            const result = EarlyBirdStaffWallet.requestWithdrawal(staffId, parseInt(amount), 'instant');
+            
+            if (result.success) {
+                Toast.success(`Withdrawal request submitted! Amount: ₹${amount}`, 'Withdrawal Submitted');
+                updateStaffWalletUI();
+            } else {
+                Toast.error(`${result.message}`, 'Withdrawal Error');
+            }
+        }
+    </script>
+    <!-- Subscription Integration Scripts -->
+    <script src="../features/subscription-integration.js"></script>
+</body>
+</html>

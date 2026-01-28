@@ -1,0 +1,743 @@
+/* ==================== CHECKOUT CONTAINER ==================== */
+
+.checkoutContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkoutContainer {
+    background: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ==================== HEADER ==================== */
+
+.checkoutHeader {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkoutHeader {
+    border-bottom-color: #333;
+  }
+}
+
+.checkoutHeader h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkoutHeader h2 {
+    color: #fff;
+  }
+}
+
+.orderAmount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1976d2;
+  margin: 0;
+}
+
+/* ==================== ERROR ALERT ==================== */
+
+.errorAlert {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 8px;
+  color: #c62828;
+  font-size: 14px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  .errorAlert {
+    background: #3e2723;
+    border-color: #d32f2f;
+    color: #ff6f6f;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==================== METHOD SELECTOR ==================== */
+
+.methodSelector h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .methodSelector h3 {
+    color: #fff;
+  }
+}
+
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.methodCard {
+  padding: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .methodCard {
+    background: #2a2a2a;
+    border-color: #333;
+  }
+}
+
+.methodCard:hover {
+  border-color: #1976d2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+}
+
+.methodCard.selected {
+  border-color: #1976d2;
+  background: #e3f2fd;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .methodCard.selected {
+    background: rgba(25, 118, 210, 0.15);
+  }
+}
+
+.methodName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .methodName {
+    color: #fff;
+  }
+}
+
+.methodDescription {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.3;
+}
+
+@media (prefers-color-scheme: dark) {
+  .methodDescription {
+    color: #aaa;
+  }
+}
+
+/* ==================== FORM CONTAINER ==================== */
+
+.formContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.backBtn {
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  color: #1976d2;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .backBtn {
+    border-color: #333;
+    color: #64b5f6;
+  }
+}
+
+.backBtn:hover {
+  background: #f5f5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .backBtn:hover {
+    background: #2a2a2a;
+  }
+}
+
+/* ==================== PAYMENT FORM ==================== */
+
+.paymentForm {
+  padding: 0;
+}
+
+.paymentForm h3 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .paymentForm h3 {
+    color: #fff;
+  }
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  .formGroup label {
+    color: #aaa;
+  }
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+  transition: border-color 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .formGroup input,
+  .formGroup select {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #fff;
+  }
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.formGroup input.error {
+  border-color: #ef5350;
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #ef5350;
+}
+
+/* ==================== FORM ROW ==================== */
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================== CHECKBOX ==================== */
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkbox {
+    background: #2a2a2a;
+  }
+}
+
+.checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox label {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkbox label {
+    color: #aaa;
+  }
+}
+
+/* ==================== SUBMIT BUTTON ==================== */
+
+.submitBtn {
+  width: 100%;
+  padding: 12px 24px;
+  margin-top: 24px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #1565c0;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* ==================== GOOGLE/APPLE PAY BUTTONS ==================== */
+
+.googlePayBtn,
+.applePayBtn {
+  width: 100%;
+  padding: 14px 24px;
+  margin-top: 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .googlePayBtn,
+  .applePayBtn {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #fff;
+  }
+}
+
+.googlePayBtn:hover:not(:disabled),
+.applePayBtn:hover:not(:disabled) {
+  border-color: #1976d2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+}
+
+.googlePayIcon,
+.applePayIcon {
+  font-size: 20px;
+}
+
+/* ==================== UPI INFO ==================== */
+
+.upiInfo {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .upiInfo {
+    background: #2a2a2a;
+    color: #aaa;
+  }
+}
+
+/* ==================== SAVED CARDS ==================== */
+
+.savedCardsSection {
+  margin-bottom: 28px;
+}
+
+.savedCardsSection h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .savedCardsSection h3 {
+    color: #fff;
+  }
+}
+
+.savedCardsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.savedCardItem {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+@media (prefers-color-scheme: dark) {
+  .savedCardItem {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+}
+
+.savedCardItem:hover {
+  border-color: #1976d2;
+}
+
+.savedCardItem.selected {
+  border-color: #1976d2;
+  background: #e3f2fd;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .savedCardItem.selected {
+    background: rgba(25, 118, 210, 0.15);
+  }
+}
+
+.cardBrand {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 4px;
+}
+
+.cardNumber {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cardNumber {
+    color: #fff;
+  }
+}
+
+.cardExpiry {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cardExpiry {
+    color: #aaa;
+  }
+}
+
+.payBtn {
+  width: 100%;
+  padding: 12px 24px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.payBtn:hover:not(:disabled) {
+  background: #1565c0;
+}
+
+.payBtn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* ==================== DIVIDER ==================== */
+
+.divider {
+  text-align: center;
+  margin: 16px 0;
+  color: #999;
+  font-size: 13px;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .divider::before,
+  .divider::after {
+    background: #444;
+  }
+}
+
+/* ==================== PROCESSING ==================== */
+
+.processingContainer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.processingContainer p {
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .processingContainer p {
+    color: #aaa;
+  }
+}
+
+/* ==================== SUCCESS ==================== */
+
+.successContainer {
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  background: #4caf50;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.successContainer h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .successContainer h2 {
+    color: #fff;
+  }
+}
+
+.successContainer p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .successContainer p {
+    color: #aaa;
+  }
+}
+
+.orderId {
+  font-weight: 600;
+  font-family: monospace;
+  color: #333;
+  margin-top: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .orderId {
+    color: #fff;
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+  .checkoutContainer {
+    border-radius: 0;
+    padding: 16px;
+  }
+
+  .methodGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .checkoutHeader h2 {
+    font-size: 20px;
+  }
+
+  .orderAmount {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkoutContainer {
+    padding: 12px;
+  }
+
+  .methodGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkoutHeader {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+
+  .checkoutHeader h2 {
+    font-size: 18px;
+  }
+
+  .orderAmount {
+    font-size: 24px;
+  }
+
+  .paymentForm h3 {
+    font-size: 16px;
+  }
+
+  .formGroup {
+    margin-bottom: 12px;
+  }
+
+  .savedCardsList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

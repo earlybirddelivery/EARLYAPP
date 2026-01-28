@@ -7,6 +7,7 @@ from models import *
 from database import db
 from auth import require_role
 from subscription_engine import subscription_engine
+from notification_service import notification_service
 
 router = APIRouter(prefix="/subscriptions", tags=["Subscriptions"])
 
@@ -35,6 +36,22 @@ async def create_subscription(sub: SubscriptionCreate, current_user: dict = Depe
         sub_doc["end_date"] = sub_doc["end_date"].isoformat()
     
     await db.subscriptions.insert_one(sub_doc)
+    
+    # Send WhatsApp subscription confirmation notification
+    try:
+        user = await db.users.find_one({"id": current_user["id"]}, {"_id": 0})
+        if user and user.get("phone_number"):
+            await notification_service.send_subscription_confirmation(
+                phone=user["phone_number"],
+                subscription_id=sub_doc["id"],
+                product_name=product.get("name", "Product"),
+                start_date=sub_doc.get("start_date"),
+                reference_id=sub_doc["id"]
+            )
+    except Exception as e:
+        # Log error but don't fail the subscription creation
+        print(f"WhatsApp notification failed for subscription {sub_doc['id']}: {str(e)}")
+    
     return sub_doc
 
 @router.get("/", response_model=List[Subscription])

@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 import os
-import hashlib
+from passlib.context import CryptContext
 from models import UserRole
 
 security = HTTPBearer()
@@ -12,13 +12,24 @@ JWT_SECRET = os.getenv("JWT_SECRET", "your-jwt-secret-key")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRATION_HOURS = int(os.getenv("JWT_EXPIRATION_HOURS", "24"))
 
+# Initialize bcrypt password context
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=12  # 12 rounds = ~100ms per hash
+)
+
 def hash_password(password: str) -> str:
-    # Simple SHA256 hash (suitable for demo, production should use proper bcrypt)
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Hash password using bcrypt with 12 rounds for security"""
+    return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Compare SHA256 hashes
-    return hash_password(plain_password) == hashed_password
+    """Verify plain password against bcrypt hash"""
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception:
+        # Handle any hashing errors gracefully
+        return False
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()

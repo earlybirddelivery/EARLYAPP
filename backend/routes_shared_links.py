@@ -11,6 +11,10 @@ from bson import ObjectId
 
 from database import db
 from auth import get_current_user, UserRole
+from delivery_validators import (
+    validate_delivery_date, validate_quantities, calculate_delivery_status,
+    prepare_audit_trail, validate_order_status
+)
 
 router = APIRouter()
 
@@ -514,41 +518,18 @@ async def mark_delivered_via_link(link_id: str, data: MarkDeliveredRequest, requ
     
     # STEP 20: Validate order_id exists in db.orders
     order = await db.orders.find_one({"id": data.order_id}, {"_id": 0})
-    if not order:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Order {data.order_id} not found. Cannot mark delivery without valid order."
-        )
+    validate_order_status(order)
     
-    # STEP 22: Validate order is not CANCELLED
-    if order.get("status") == "CANCELLED":
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot mark delivery for a cancelled order"
-        )
+    # STEP 27: Validate delivery date using centralized validator
+    valid, error = validate_delivery_date(link.get('date'), order.get("delivery_date", link.get('date')))
+    if not valid:
+        raise HTTPException(status_code=400, detail=error)
     
-    # STEP 27: Validate delivery date
-    from datetime import date as date_cls, timedelta
-    delivery_date_obj = datetime.strptime(link.get('date'), "%Y-%m-%d").date()
-    today = date_cls.today()
-    
-    # Check 1: No future dates
-    if delivery_date_obj > today:
-        raise HTTPException(
-            status_code=400,
-            detail="Delivery date cannot be in the future"
-        )
-    
-    # Check 2: Within order window (±1 day from order delivery date)
-    order_delivery_date_obj = datetime.strptime(order.get("delivery_date", link.get('date')), "%Y-%m-%d").date()
-    date_diff = abs((delivery_date_obj - order_delivery_date_obj).days)
-    if date_diff > 1:
-        window_start = order_delivery_date_obj - timedelta(days=1)
-        window_end = order_delivery_date_obj + timedelta(days=1)
-        raise HTTPException(
-            status_code=400,
-            detail=f"Delivery date outside order window ({window_start.strftime('%b %d')} to {window_end.strftime('%b %d')})"
-        )
+    # STEP 26: Validate quantities if partial delivery
+    if data.delivery_type == "partial" and data.delivered_products:
+        valid, error = validate_quantities(data.delivered_products, order.get("items", []))
+        if not valid:
+            raise HTTPException(status_code=400, detail=error)
     
     now_iso = datetime.utcnow().isoformat()
     

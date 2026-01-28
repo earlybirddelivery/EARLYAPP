@@ -15,6 +15,7 @@ load_dotenv(ROOT_DIR / '.env')
 from models import UserLogin, Token, UserRole
 from database import db, close_database
 from auth import hash_password, verify_password, create_access_token, get_current_user
+from password_migration import verify_password_with_migration, update_migration_stats
 
 # Create the main app
 app = FastAPI(title="EarlyBird Delivery Services")
@@ -50,8 +51,23 @@ async def login(credentials: UserLogin):
     
     # Support both "password" and "password_hash" fields
     user_password = user.get("password_hash") or user.get("password")
-    if not user_password or not verify_password(credentials.password, user_password):
+    if not user_password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Verify password with migration support (SHA256 → Bcrypt)
+    is_valid, was_upgraded = await verify_password_with_migration(
+        credentials.password,
+        user_password,
+        user_id=user["id"],
+        db=db
+    )
+    
+    if not is_valid:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Log password upgrade if it occurred
+    if was_upgraded:
+        print(f"[PASSWORD MIGRATION] User {user['email']} password upgraded from SHA256 to bcrypt")
     
     if not user.get("is_active", True):
         raise HTTPException(status_code=403, detail="Account is inactive")
@@ -79,7 +95,29 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-# Import routes - skip if they don't exist
+# Import consolidated routes (STEP 28-29 consolidation & UUID standardization)
+try:
+    from routes_orders_consolidated import router as orders_router
+    api_router.include_router(orders_router)
+    print("[OK] Consolidated Orders & Subscriptions routes loaded")
+except Exception as e:
+    print(f"[WARN] Consolidated Orders routes not available: {e}")
+
+try:
+    from routes_products_consolidated import router as products_router
+    api_router.include_router(products_router)
+    print("[OK] Consolidated Products, Admin & Supplier routes loaded")
+except Exception as e:
+    print(f"[WARN] Consolidated Products routes not available: {e}")
+
+try:
+    from routes_admin_consolidated import router as admin_router
+    api_router.include_router(admin_router)
+    print("[OK] Consolidated Admin & Marketing routes loaded")
+except Exception as e:
+    print(f"[WARN] Consolidated Admin routes not available: {e}")
+
+# Import Phase 0 V2 for compatibility
 try:
     from routes_phase0_updated import router as phase0_v2_router
     api_router.include_router(phase0_v2_router)
@@ -87,27 +125,7 @@ try:
 except Exception as e:
     print(f"[WARN] Phase 0 V2 routes not available: {e}")
 
-try:
-    from routes_admin import router as admin_router
-    api_router.include_router(admin_router)
-    print("[OK] Admin routes loaded")
-except Exception as e:
-    print(f"[WARN] Admin routes not available: {e}")
-
-try:
-    from routes_products import router as products_router
-    api_router.include_router(products_router)
-    print("[OK] Products routes loaded")
-except Exception as e:
-    print(f"[WARN] Products routes not available: {e}")
-
-try:
-    from routes_supplier import router as suppliers_router
-    api_router.include_router(suppliers_router)
-    print("[OK] Supplier routes loaded")
-except Exception as e:
-    print(f"[WARN] Supplier routes not available: {e}")
-
+# Import remaining specialized routes
 try:
     from routes_billing import router as billing_router
     api_router.include_router(billing_router)
@@ -116,11 +134,11 @@ except Exception as e:
     print(f"[WARN] Billing routes not available: {e}")
 
 try:
-    from routes_orders import router as orders_router
-    api_router.include_router(orders_router)
-    print("[OK] Orders routes loaded")
+    from routes_notifications import router as notifications_router
+    api_router.include_router(notifications_router)
+    print("[OK] WhatsApp Notification routes loaded")
 except Exception as e:
-    print(f"[WARN] Orders routes not available: {e}")
+    print(f"[WARN] Notification routes not available: {e}")
 
 try:
     from routes_customer import router as customer_router
@@ -130,11 +148,11 @@ except Exception as e:
     print(f"[WARN] Customer routes not available: {e}")
 
 try:
-    from routes_delivery_operations import router as delivery_ops_router
-    api_router.include_router(delivery_ops_router)
-    print("[OK] Delivery operations routes loaded")
+    from routes_delivery_consolidated import router as delivery_router
+    api_router.include_router(delivery_router)
+    print("[OK] Consolidated delivery routes loaded")
 except Exception as e:
-    print(f"[WARN] Delivery operations routes not available: {e}")
+    print(f"[WARN] Consolidated delivery routes not available: {e}")
 
 try:
     from routes_shared_links import router as shared_links_router
@@ -142,6 +160,48 @@ try:
     print("[OK] Shared links routes loaded")
 except Exception as e:
     print(f"[WARN] Shared links routes not available: {e}")
+
+try:
+    from routes_disputes import router as disputes_router
+    api_router.include_router(disputes_router)
+    print("[OK] Dispute Resolution routes loaded")
+except Exception as e:
+    print(f"[WARN] Dispute Resolution routes not available: {e}")
+
+try:
+    from routes_product_requests import router as product_requests_router
+    api_router.include_router(product_requests_router)
+    print("[OK] Product Requests routes loaded")
+except Exception as e:
+    print(f"[WARN] Product Requests routes not available: {e}")
+
+try:
+    from routes_analytics import router as analytics_router
+    api_router.include_router(analytics_router)
+    print("[OK] Analytics routes loaded")
+except Exception as e:
+    print(f"[WARN] Analytics routes not available: {e}")
+
+try:
+    from routes_gps import router as gps_router
+    api_router.include_router(gps_router)
+    print("[OK] GPS Tracking routes loaded")
+except Exception as e:
+    print(f"[WARN] GPS Tracking routes not available: {e}")
+
+try:
+    from routes_earnings import router as earnings_router
+    api_router.include_router(earnings_router)
+    print("[OK] Staff Earnings routes loaded")
+except Exception as e:
+    print(f"[WARN] Staff Earnings routes not available: {e}")
+
+try:
+    from routes_staff_wallet import router as staff_wallet_router
+    api_router.include_router(staff_wallet_router)
+    print("[OK] Staff Wallet routes loaded")
+except Exception as e:
+    print(f"[WARN] Staff Wallet routes not available: {e}")
 
 # Include the api router in the main app
 app.include_router(api_router)
@@ -151,6 +211,37 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# ==================== STARTUP & SHUTDOWN ====================
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize WhatsApp notification templates and start background tasks"""
+    try:
+        from notification_templates import initialize_templates
+        await initialize_templates()
+        print("[OK] WhatsApp notification templates initialized")
+    except Exception as e:
+        print(f"[WARN] Failed to initialize notification templates: {e}")
+    
+    # Start background queue processor task
+    import asyncio
+    
+    async def process_notification_queue():
+        """Background task to process message queue every 5 minutes"""
+        from notification_service import notification_service
+        while True:
+            try:
+                await asyncio.sleep(300)  # Run every 5 minutes
+                await notification_service.process_queue()
+            except Exception as e:
+                logger.error(f"Error processing notification queue: {e}")
+    
+    try:
+        asyncio.create_task(process_notification_queue())
+        print("[OK] Background notification queue processor started")
+    except Exception as e:
+        print(f"[WARN] Failed to start background queue processor: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

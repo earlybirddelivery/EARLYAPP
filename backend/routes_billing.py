@@ -15,6 +15,7 @@ from models_phase0_updated import (
 from database import db
 from auth import get_current_user
 from subscription_engine_v2 import subscription_engine
+from notification_service import notification_service
 
 router = APIRouter(prefix="/billing", tags=["Monthly Billing"])
 
@@ -433,6 +434,20 @@ async def record_payment(
         }
         
         await db.payment_transactions.insert_one(payment_doc)
+        
+        # Send WhatsApp payment confirmation notification
+        try:
+            if customer and customer.get("phone_number"):
+                await notification_service.send_payment_confirmation(
+                    phone=customer["phone_number"],
+                    amount=payment.amount,
+                    month=payment.month,
+                    payment_method=payment.payment_method,
+                    reference_id=payment_doc["id"]
+                )
+        except Exception as e:
+            # Log error but don't fail the payment recording
+            print(f"WhatsApp notification failed for payment {payment_doc['id']}: {str(e)}")
         
         return payment_doc
     
