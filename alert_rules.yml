@@ -1,0 +1,306 @@
+groups:
+  - name: kirana_alerts
+    interval: 30s
+    rules:
+      # =====================
+      # API & Application Alerts
+      # =====================
+      
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}"
+          runbook_url: "https://wiki.internal/runbooks/high-error-rate"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, http_request_duration_seconds_bucket) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High API latency detected"
+          description: "P95 latency is {{ $value }}s for {{ $labels.job }}"
+
+      - alert: APITimeout
+        expr: rate(http_requests_total{status="504"}[5m]) > 0.001
+        for: 3m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "API timeouts detected"
+          description: "Gateway timeouts at {{ $value | humanizePercentage }} for {{ $labels.job }}"
+
+      # =====================
+      # Database Alerts
+      # =====================
+
+      - alert: DatabaseConnectionPoolExhausted
+        expr: mongodb_connections_total{state="closed"} / mongodb_connections_total{state="open"} > 0.9
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection pool nearly exhausted"
+          description: "{{ $value | humanizePercentage }} of connections exhausted"
+
+      - alert: SlowDatabaseQueries
+        expr: mongodb_operation_duration_seconds_bucket{le="0.3"} < 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Less than 50% of queries complete within 300ms"
+
+      - alert: HighDiskUsage
+        expr: mongodb_storage_disk_used_bytes / mongodb_storage_disk_total_bytes > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database disk usage critical"
+          description: "Database disk is {{ $value | humanizePercentage }} full"
+
+      - alert: MongoDBDown
+        expr: mongodb_up == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "MongoDB is down"
+          description: "MongoDB has been down for more than 1 minute"
+
+      # =====================
+      # Cache & Performance Alerts
+      # =====================
+
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: cache
+        annotations:
+          summary: "Redis cache is down"
+          description: "Redis has been down for more than 1 minute"
+
+      - alert: RedisCachePressure
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory is {{ $value | humanizePercentage }} full"
+
+      - alert: HighCacheMissRate
+        expr: rate(redis_keyspace_misses_total[5m]) / (rate(redis_keyspace_misses_total[5m]) + rate(redis_keyspace_hits_total[5m])) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "High cache miss rate"
+          description: "Cache miss rate is {{ $value | humanizePercentage }}"
+
+      # =====================
+      # Infrastructure Alerts
+      # =====================
+
+      - alert: HighCPUUsage
+        expr: (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanizePercentage }}"
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+
+      - alert: DiskSpaceRunningOut
+        expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "Disk space running out on {{ $labels.instance }}"
+          description: "Disk usage is {{ $value | humanizePercentage }}"
+
+      - alert: NodeDown
+        expr: up{job="node"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "Node {{ $labels.instance }} is down"
+          description: "Node has been unreachable for more than 2 minutes"
+
+      - alert: HighNetworkTraffic
+        expr: rate(node_network_transmit_bytes_total[5m]) + rate(node_network_receive_bytes_total[5m]) > 1000000000
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High network traffic on {{ $labels.instance }}"
+          description: "Network traffic is {{ $value | humanize }}B/s"
+
+      # =====================
+      # Business Logic Alerts
+      # =====================
+
+      - alert: PaymentProcessingFailure
+        expr: rate(payment_failed_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: payments
+        annotations:
+          summary: "High payment failure rate"
+          description: "Payment failure rate is {{ $value | humanizePercentage }}"
+
+      - alert: OrderProcessingBacklog
+        expr: orders_pending_count > 100
+        for: 10m
+        labels:
+          severity: warning
+          component: orders
+        annotations:
+          summary: "Large order processing backlog"
+          description: "{{ $value }} orders pending processing"
+
+      - alert: SearchResponseSlow
+        expr: histogram_quantile(0.95, search_response_time_seconds_bucket) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          component: search
+        annotations:
+          summary: "Search queries are slow"
+          description: "P95 search latency is {{ $value }}s"
+
+      - alert: AuthenticationFailureRate
+        expr: rate(auth_failures_total[5m]) > 0.02
+        for: 5m
+        labels:
+          severity: warning
+          component: auth
+        annotations:
+          summary: "High authentication failure rate"
+          description: "Auth failure rate is {{ $value | humanizePercentage }}"
+
+      - alert: SuspiciousActivity
+        expr: audit_log_events_total{action="failed_permission_check"} > 50
+        for: 2m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Suspicious activity detected"
+          description: "{{ $value }} failed permission checks detected"
+
+      # =====================
+      # Service Availability
+      # =====================
+
+      - alert: ServiceDown
+        expr: up{job!="prometheus"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: availability
+        annotations:
+          summary: "{{ $labels.job }} service is down"
+          description: "{{ $labels.instance }} has been unreachable for 2 minutes"
+
+      - alert: ServiceStartupFailure
+        expr: time() - process_start_time_seconds{job!="node"} < 300
+        for: 5m
+        labels:
+          severity: warning
+          component: availability
+        annotations:
+          summary: "{{ $labels.job }} has restarted recently"
+          description: "Service was restarted {{ $value }}s ago"
+
+      - alert: ContainerRestart
+        expr: rate(container_restart_count[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          component: availability
+        annotations:
+          summary: "Container {{ $labels.name }} is restarting"
+          description: "Container has restarted {{ $value }} times in 5 minutes"
+
+      # =====================
+      # External Dependencies
+      # =====================
+
+      - alert: ExternalServiceDown
+        expr: external_service_up == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: external
+        annotations:
+          summary: "External service {{ $labels.service }} is down"
+          description: "{{ $labels.service }} has been unavailable for 5 minutes"
+
+      - alert: RateLimitApproaching
+        expr: external_api_rate_limit_remaining / external_api_rate_limit_total < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: external
+        annotations:
+          summary: "Approaching rate limit for {{ $labels.service }}"
+          description: "Only {{ $value | humanizePercentage }} of rate limit remaining"
+
+      # =====================
+      # Backup & Recovery
+      # =====================
+
+      - alert: BackupFailed
+        expr: time() - backup_last_successful_timestamp > 86400
+        for: 1m
+        labels:
+          severity: critical
+          component: backup
+        annotations:
+          summary: "Database backup failed"
+          description: "No successful backup for {{ $value | humanizeDuration }}"
+
+      - alert: BackupStorageLow
+        expr: backup_storage_available_bytes / backup_storage_total_bytes < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: backup
+        annotations:
+          summary: "Backup storage running low"
+          description: "Only {{ $value | humanizePercentage }} of backup storage available"

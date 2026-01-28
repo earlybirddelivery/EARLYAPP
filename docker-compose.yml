@@ -1,0 +1,155 @@
+version: '3.9'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: kirana_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER:-kiranamin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-kiranaminpass}
+      MONGO_INITDB_DATABASE: kirana_db
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - kirana_network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/kirana_db --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7.0-alpine
+    container_name: kirana_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-kiranaredispass}
+    volumes:
+      - redis_data:/data
+    networks:
+      - kirana_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Flask Application
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kirana_backend
+    restart: unless-stopped
+    ports:
+      - "5000:8001"
+    environment:
+      FLASK_APP: server.py
+      FLASK_ENV: development
+      DEBUG: "True"
+      MONGODB_URI: mongodb://${MONGODB_USER:-kiranamin}:${MONGODB_PASSWORD:-kiranaminpass}@mongodb:27017/kirana_db
+      REDIS_URL: redis://:${REDIS_PASSWORD:-kiranaredispass}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/__pycache__
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kirana_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend React Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kirana_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
+      REACT_APP_WEBSOCKET_URL: ws://localhost:5000
+      NODE_ENV: development
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - kirana_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PgAdmin for Database Management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: kirana_pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@kirana.local
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-adminpass}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - kirana_network
+    depends_on:
+      - mongodb
+
+  # MongoDB Express for MongoDB Management
+  mongo-express:
+    image: mongo-express:latest
+    container_name: kirana_mongo_express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USER:-kiranamin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD:-kiranaminpass}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_USER:-kiranamin}:${MONGODB_PASSWORD:-kiranaminpass}@mongodb:27017/
+      ME_CONFIG_BASICAUTH: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD:-adminpass}
+    depends_on:
+      - mongodb
+    networks:
+      - kirana_network
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+  redis_data:
+  pgadmin_data:
+
+networks:
+  kirana_network:
+    driver: bridge

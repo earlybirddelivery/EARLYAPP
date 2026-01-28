@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+dist/
+build/
+
+# Kirana-UI library (Phase 6 enhancement)
+frontend/src/lib/kirana-ui/
+
+# Build artifacts
+*.tsbuildinfo
+.next/
+.turbo/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,198 @@
+version: '3.9'
+
+services:
+  # Backend Service (Staging)
+  backend:
+    image: ghcr.io/earlybird-emergent/backend:${IMAGE_TAG:-latest}
+    container_name: kiranast-backend-staging
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=staging
+      - FLASK_DEBUG=0
+      - DATABASE_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/kiranast_staging?authSource=admin
+      - REDIS_URL=redis://${REDIS_PASSWORD}@redis:6379/0
+      - JWT_SECRET=${JWT_SECRET}
+      - API_KEY=${API_KEY}
+      - FLASK_APP=server.py
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./backend/logs:/app/logs
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      com.earlybird.service: backend
+      com.earlybird.environment: staging
+
+  # Frontend Service (Staging)
+  frontend:
+    image: ghcr.io/earlybird-emergent/frontend:${IMAGE_TAG:-latest}
+    container_name: kiranast-frontend-staging
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - REACT_APP_API_URL=https://staging-api.kiranast ore.com
+      - NODE_ENV=production
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/ssl:/etc/nginx/ssl:ro
+      - ./frontend/logs:/var/log/nginx
+    depends_on:
+      - backend
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      com.earlybird.service: frontend
+      com.earlybird.environment: staging
+
+  # MongoDB Database (Staging)
+  mongo:
+    image: mongo:6.0
+    container_name: kiranast-db-staging
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=kiranast_staging
+    volumes:
+      - mongo_data_staging:/data/db
+      - mongo_config_staging:/data/configdb
+      - ./backups:/backups
+      - ./mongo/mongod.conf:/etc/mongod.conf:ro
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    labels:
+      com.earlybird.service: database
+      com.earlybird.environment: staging
+
+  # Redis Cache (Staging)
+  redis:
+    image: redis:7-alpine
+    container_name: kiranast-cache-staging
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_data_staging:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    labels:
+      com.earlybird.service: cache
+      com.earlybird.environment: staging
+
+  # Backup Service (Staging)
+  backup:
+    image: ghcr.io/earlybird-emergent/backup:${IMAGE_TAG:-latest}
+    container_name: kiranast-backup-staging
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017
+      - BACKUP_DIR=/backups
+      - BACKUP_INTERVAL=3600
+      - S3_BUCKET=${S3_BUCKET}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - mongo
+    networks:
+      - kiranast-network
+    labels:
+      com.earlybird.service: backup
+      com.earlybird.environment: staging
+
+  # Monitoring Service (Staging)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: kiranast-prometheus-staging
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data_staging:/prometheus
+    networks:
+      - kiranast-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    labels:
+      com.earlybird.service: monitoring
+      com.earlybird.environment: staging
+
+  # Grafana Dashboards (Staging)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: kiranast-grafana-staging
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data_staging:/var/lib/grafana
+      - ./monitoring/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - kiranast-network
+    labels:
+      com.earlybird.service: monitoring
+      com.earlybird.environment: staging
+
+networks:
+  kiranast-network:
+    driver: bridge
+
+volumes:
+  mongo_data_staging:
+    driver: local
+  mongo_config_staging:
+    driver: local
+  redis_data_staging:
+    driver: local
+  prometheus_data_staging:
+    driver: local
+  grafana_data_staging:
+    driver: local

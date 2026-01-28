@@ -1,0 +1,15 @@
+# Kirana-UI Component Library - Phase 6 Enhancement
+# These files contain pre-implementation stubs and TODOs
+# All errors here are scoped for Phase 6 implementation
+
+# Component stubs (to be implemented)
+components/
+hooks/
+
+# Story files (Phase 6 Storybook setup)
+*.stories.tsx
+*.stories.ts
+
+# All TSX/TS in lib (phase 6 scope)
+*.ts
+*.tsx

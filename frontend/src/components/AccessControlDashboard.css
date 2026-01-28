@@ -1,0 +1,639 @@
+/* 
+  PHASE 4B.6: Access Control Dashboard Styles
+  Author: AI Agent
+  Date: January 28, 2026
+*/
+
+.access-control-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+/* Header */
+.dashboard-header {
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Alerts */
+.alert {
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+.alert button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #0c5460;
+}
+
+/* Tabs */
+.dashboard-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 12px 20px;
+  border: none;
+  background: #f0f0f0;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.tab-button:hover {
+  background: #e0e0e0;
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Content */
+.dashboard-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tab-content {
+  padding: 30px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #667eea;
+}
+
+.section h3 {
+  margin: 20px 0 15px 0;
+  color: #444;
+  font-size: 16px;
+}
+
+/* User Selection */
+.user-selection {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.user-selection label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.user-selection select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Forms */
+.form-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* Tables */
+.permissions-table,
+.users-table,
+.audit-table,
+.resources-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.permissions-table thead,
+.users-table thead,
+.audit-table thead,
+.resources-table thead {
+  background: #f0f0f0;
+}
+
+.permissions-table th,
+.users-table th,
+.audit-table th,
+.resources-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+}
+
+.permissions-table td,
+.users-table td,
+.audit-table td,
+.resources-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.permissions-table tbody tr:hover,
+.users-table tbody tr:hover,
+.audit-table tbody tr:hover,
+.resources-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.permissions-table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+/* Status Badges */
+.status-enabled {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-disabled {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.status-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.status-failure {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.audit-table tr.status-success {
+  border-left: 3px solid #28a745;
+}
+
+.audit-table tr.status-failure {
+  border-left: 3px solid #dc3545;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #667eea;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Permissions List */
+.permissions-list {
+  margin-top: 20px;
+}
+
+.permissions-list h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Roles */
+.roles-list {
+  margin-top: 20px;
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.role-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.role-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.role-card h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.role-level {
+  color: #667eea;
+  font-weight: 600;
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.role-description {
+  color: #666;
+  font-size: 13px;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.role-permissions {
+  background: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #667eea;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Info Box */
+.info-box {
+  background: #e7f3ff;
+  padding: 20px;
+  border-radius: 6px;
+  border-left: 4px solid #2196F3;
+  margin-top: 20px;
+}
+
+.info-box h3 {
+  margin-top: 0;
+  color: #1565c0;
+}
+
+.info-box p,
+.info-box li {
+  color: #333;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.info-box ul {
+  padding-left: 20px;
+}
+
+/* Resources */
+.resources-list {
+  margin-top: 20px;
+}
+
+.resources-table {
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .access-control-dashboard {
+    padding: 10px;
+  }
+
+  .dashboard-header {
+    padding: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
+  .dashboard-tabs {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tab-button {
+    width: 100%;
+    text-align: left;
+    border-radius: 0;
+  }
+
+  .tab-content {
+    padding: 15px;
+  }
+
+  .form-section {
+    padding: 15px;
+  }
+
+  .filter-section {
+    grid-template-columns: 1fr;
+  }
+
+  .permissions-table,
+  .users-table,
+  .audit-table,
+  .resources-table {
+    font-size: 12px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .permissions-table th,
+  .users-table th,
+  .audit-table th,
+  .resources-table th,
+  .permissions-table td,
+  .users-table td,
+  .audit-table td,
+  .resources-table td {
+    padding: 8px;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 18px;
+  }
+
+  .section h2 {
+    font-size: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Loading State */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  border-top-color: #667eea;
+  animation: spin 1s linear infinite;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .access-control-dashboard {
+    background: #1a1a1a;
+  }
+
+  .dashboard-header,
+  .dashboard-tabs,
+  .dashboard-content {
+    background: #2d2d2d;
+    color: #fff;
+  }
+
+  .dashboard-header h1,
+  .dashboard-header p,
+  .section h2,
+  .section h3,
+  .form-group label,
+  .tab-button,
+  .role-card,
+  .info-box {
+    color: #fff;
+  }
+
+  .form-section,
+  .user-selection,
+  .filter-section {
+    background: #3d3d3d;
+  }
+
+  .form-group input,
+  .form-group select {
+    background: #3d3d3d;
+    color: #fff;
+    border-color: #555;
+  }
+
+  .permissions-table thead,
+  .users-table thead,
+  .audit-table thead,
+  .resources-table thead {
+    background: #3d3d3d;
+  }
+
+  .permissions-table th,
+  .users-table th,
+  .audit-table th,
+  .resources-table th {
+    color: #fff;
+    border-bottom-color: #555;
+  }
+
+  .permissions-table td,
+  .users-table td,
+  .audit-table td,
+  .resources-table td {
+    border-bottom-color: #444;
+  }
+
+  .permissions-table tbody tr:hover,
+  .users-table tbody tr:hover,
+  .audit-table tbody tr:hover,
+  .resources-table tbody tr:hover {
+    background: #3d3d3d;
+  }
+
+  .role-card {
+    background: #3d3d3d;
+  }
+
+  .role-description {
+    color: #aaa;
+  }
+
+  .info-box {
+    background: #2a3f5a;
+    border-left-color: #5c9cff;
+  }
+
+  .info-box h3,
+  .info-box p,
+  .info-box li {
+    color: #b0d4ff;
+  }
+
+  .tab-button {
+    background: #3d3d3d;
+    color: #fff;
+  }
+
+  .tab-button:hover {
+    background: #4d4d4d;
+  }
+}

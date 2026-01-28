@@ -1,0 +1,79 @@
+{
+  "name": "kirana-mobile",
+  "version": "1.0.0",
+  "description": "Kirana Store Native Mobile App - Capacitor",
+  "main": "index.js",
+  "scripts": {
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "serve": "serve -s build",
+    "cap:add:ios": "npx cap add ios",
+    "cap:add:android": "npx cap add android",
+    "cap:build:ios": "npm run build && npx cap copy ios && npx cap build ios",
+    "cap:build:android": "npm run build && npx cap copy android && npx cap build android",
+    "cap:open:ios": "npx cap open ios",
+    "cap:open:android": "npx cap open android",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:copy": "npx cap copy",
+    "web:dev": "react-scripts start",
+    "web:build": "react-scripts build",
+    "ios:dev": "npm run dev",
+    "ios:build": "npm run cap:build:ios",
+    "android:dev": "npm run dev",
+    "android:build": "npm run cap:build:android"
+  },
+  "dependencies": {
+    "@capacitor/app": "^1.1.0",
+    "@capacitor/camera": "^1.3.0",
+    "@capacitor/core": "^3.0.0",
+    "@capacitor/device": "^1.1.0",
+    "@capacitor/geolocation": "^1.3.0",
+    "@capacitor/haptics": "^1.1.0",
+    "@capacitor/keyboard": "^1.2.0",
+    "@capacitor/network": "^1.3.0",
+    "@capacitor/push-notifications": "^1.3.0",
+    "@capacitor/share": "^1.1.0",
+    "@capacitor/status-bar": "^1.3.0",
+    "@capacitor/storage": "^1.2.5",
+    "@react-navigation/bottom-tabs": "^6.5.0",
+    "@react-navigation/native": "^6.1.0",
+    "@react-navigation/stack": "^6.3.0",
+    "axios": "^1.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native-web": "^0.19.0",
+    "react-scripts": "5.0.1",
+    "zustand": "^4.4.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "serve": "^14.2.0",
+    "typescript": "^5.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "capacitor": {
+    "appId": "com.kirana.store",
+    "appName": "Kirana Store",
+    "webDir": "build",
+    "bundledWebRuntime": false,
+    "server": {
+      "url": "http://192.168.1.100:3000",
+      "cleartext": true
+    }
+  }
+}

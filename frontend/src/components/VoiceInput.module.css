@@ -1,0 +1,429 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.header h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Main Record Button */
+.recordButton {
+  width: 100%;
+  padding: 20px;
+  height: 160px;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: #667eea;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.recordButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.recordButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.recordButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.micIcon {
+  font-size: 48px;
+  animation: pulse 2s infinite;
+}
+
+.buttonText {
+  display: block;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Recording Container */
+.recordingContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.timer {
+  margin: 0;
+  font-size: 32px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+/* Waveform */
+.waveformContainer {
+  margin: 24px 0;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.waveform {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 4px;
+}
+
+.waveformBar {
+  flex: 1;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-radius: 2px;
+  min-height: 2px;
+  max-height: 100%;
+  transition: height 0.05s ease;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.buttonPause,
+.buttonResume,
+.buttonStop,
+.buttonCancel {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 100px;
+}
+
+.buttonPause,
+.buttonResume {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+.buttonPause:hover,
+.buttonResume:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.buttonStop {
+  background: #10b981;
+  color: white;
+  border: none;
+}
+
+.buttonStop:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.buttonCancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.buttonCancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Instructions */
+.instructions {
+  text-align: center;
+  font-size: 14px;
+  margin: 16px 0;
+  opacity: 0.9;
+}
+
+/* Processing */
+.processingContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% { width: 0; }
+  50% { width: 100%; }
+  100% { width: 0; }
+}
+
+/* Result Container */
+.resultContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.confidenceBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.confidenceBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.confidenceFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.transcriptionBox {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.transcriptionText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buttonPrimary {
+  background: white;
+  color: #667eea;
+}
+
+.buttonPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.buttonSecondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.buttonSecondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Error State */
+.errorMessage {
+  background: rgba(220, 38, 38, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  color: #fecaca;
+  font-size: 14px;
+}
+
+.errorMessage p {
+  margin: 0;
+}
+
+/* Permission Error */
+.permissionError {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+  border-radius: 16px;
+  color: white;
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.permissionError h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+}
+
+.permissionError p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.instructions {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: left;
+}
+
+/* Permission Note */
+.permissionNote {
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container,
+  .recordingContainer,
+  .processingContainer,
+  .resultContainer,
+  .permissionError {
+    border-radius: 12px;
+    padding: 16px;
+  }
+  
+  .recordButton {
+    height: 140px;
+  }
+  
+  .waveformContainer {
+    height: 100px;
+  }
+  
+  .controls {
+    gap: 8px;
+  }
+  
+  .buttonPause,
+  .buttonResume,
+  .buttonStop,
+  .buttonCancel {
+    min-width: 80px;
+    padding: 10px 16px;
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .container,
+  .recordingContainer,
+  .processingContainer,
+  .resultContainer {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #e2e8f0;
+  }
+}

@@ -1,0 +1,76 @@
+/**
+ * Package.json for Kirana-UI NPM Package
+ * Modern component library for EarlyBird Kirana
+ */
+
+{
+  "name": "@earlybird/kirana-ui",
+  "version": "2.0.0",
+  "description": "Modern, accessible, TypeScript-first component library for EarlyBird Kirana platform",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint src --ext .ts,.tsx",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^7.5.0",
+    "@storybook/addon-essentials": "^7.5.0",
+    "@storybook/addon-interactions": "^7.5.0",
+    "@storybook/addon-links": "^7.5.0",
+    "@storybook/addon-viewport": "^7.5.0",
+    "@storybook/react": "^7.5.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.1.0",
+    "@vitest/ui": "^0.34.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "react-docgen-typescript": "^2.2.0",
+    "storybook": "^7.5.0",
+    "typescript": "^5.2.0",
+    "vite": "^4.5.0",
+    "vite-plugin-dts": "^4.0.0",
+    "vitest": "^0.34.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "keywords": [
+    "react",
+    "component-library",
+    "ui",
+    "design-system",
+    "typescript",
+    "earlybird",
+    "kirana"
+  ],
+  "author": "EarlyBird Kirana Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earlybird/earlybird-emergent.git",
+    "directory": "frontend/src/lib/kirana-ui"
+  },
+  "homepage": "https://kirana-ui.earlybird.dev"
+}

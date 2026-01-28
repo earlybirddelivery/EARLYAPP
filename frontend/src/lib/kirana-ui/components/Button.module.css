@@ -1,0 +1,200 @@
+/**
+ * Button Component Styles
+ * Comprehensive styling for all button variants and sizes
+ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: inherit;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+
+  &:focus-visible {
+    outline-color: currentColor;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+/* Sizes */
+.button-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  height: 2rem;
+}
+
+.button-md {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  height: 2.5rem;
+}
+
+.button-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  height: 3rem;
+}
+
+.button-xl {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  height: 3.5rem;
+}
+
+/* Full Width */
+.button-fullWidth {
+  width: 100%;
+}
+
+/* Disabled */
+.button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* Primary Variant */
+.button-primary {
+  background-color: #0066cc;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #0052a3;
+    box-shadow: 0 4px 6px rgba(0, 102, 204, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    background-color: #003d7a;
+  }
+}
+
+/* Secondary Variant */
+.button-secondary {
+  background-color: #6b7280;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #4b5563;
+    box-shadow: 0 4px 6px rgba(107, 114, 128, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    background-color: #374151;
+  }
+}
+
+/* Danger Variant */
+.button-danger {
+  background-color: #dc2626;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #b91c1c;
+    box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    background-color: #991b1b;
+  }
+}
+
+/* Success Variant */
+.button-success {
+  background-color: #16a34a;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #15803d;
+    box-shadow: 0 4px 6px rgba(22, 163, 74, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    background-color: #166534;
+  }
+}
+
+/* Outline Variant */
+.button-outline {
+  background-color: transparent;
+  border: 2px solid #0066cc;
+  color: #0066cc;
+
+  &:hover:not(:disabled) {
+    background-color: #f0f7ff;
+  }
+
+  &:active:not(:disabled) {
+    background-color: #e0effe;
+  }
+}
+
+/* Ghost Variant */
+.button-ghost {
+  background-color: transparent;
+  color: #0066cc;
+
+  &:hover:not(:disabled) {
+    background-color: #f3f4f6;
+  }
+
+  &:active:not(:disabled) {
+    background-color: #e5e7eb;
+  }
+}
+
+/* Icons */
+.iconBefore,
+.iconAfter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading Spinner */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .button-outline {
+    border-color: #60a5fa;
+    color: #60a5fa;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(96, 165, 250, 0.1);
+    }
+  }
+
+  .button-ghost {
+    color: #60a5fa;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}

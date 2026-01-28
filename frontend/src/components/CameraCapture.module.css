@@ -1,0 +1,560 @@
+/* CameraCapture Component Styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #333;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.closeBtn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Camera View */
+.cameraView {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  overflow: hidden;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  margin: 16px 0 0 0;
+  color: white;
+  font-size: 14px;
+}
+
+/* Guide Overlay */
+.guideOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.guideFrame {
+  position: relative;
+  width: 80%;
+  max-width: 400px;
+  aspect-ratio: 16 / 12;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+}
+
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #4CAF50;
+}
+
+.topLeft {
+  top: -10px;
+  left: -10px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 8px 0 0 0;
+}
+
+.topRight {
+  top: -10px;
+  right: -10px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 8px 0 0;
+}
+
+.bottomLeft {
+  bottom: -10px;
+  left: -10px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 8px;
+}
+
+.bottomRight {
+  bottom: -10px;
+  right: -10px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 8px 0;
+}
+
+.hint {
+  margin-top: 20px;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: white;
+}
+
+.captureBtn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.captureBtn:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.captureBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cameraToggle,
+.galleryBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  border: 2px solid #ddd;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cameraToggle:hover:not(:disabled),
+.galleryBtn:hover:not(:disabled) {
+  background: #e8e8e8;
+  border-color: #667eea;
+  transform: scale(1.05);
+}
+
+.cameraToggle:disabled,
+.galleryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Photo Preview */
+.photoPreview {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: white;
+  min-height: 400px;
+}
+
+.photoPreview img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  max-height: 400px;
+}
+
+.photoInfo {
+  background: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #666;
+}
+
+.photoInfo p {
+  margin: 4px 0;
+}
+
+.fileSize {
+  color: #999;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.retakeBtn,
+.submitBtn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.retakeBtn {
+  background: #f5f5f5;
+  color: #333;
+  border: 2px solid #ddd;
+}
+
+.retakeBtn:hover:not(:disabled) {
+  background: #e8e8e8;
+  border-color: #667eea;
+}
+
+.submitBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.retakeBtn:disabled,
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.retryInfo {
+  background: #FFF3CD;
+  border: 1px solid #FFECB5;
+  color: #856404;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.retryInfo p {
+  margin: 0;
+}
+
+/* Instructions */
+.instructions {
+  background: #f5f5f5;
+  padding: 20px 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.instructions h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.instructions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.instructions li {
+  padding: 6px 0;
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instructions ol {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.instructions ol li {
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+/* Permission Error */
+.permissionError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  background: white;
+  min-height: 400px;
+}
+
+.errorIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.permissionError h2 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.permissionError p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.permissionError .instructions {
+  width: 100%;
+  border-radius: 0;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+/* Error Message */
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFEBEE;
+  color: #C62828;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 16px 24px;
+  font-size: 14px;
+  flex: 1;
+}
+
+.errorIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.dismissBtn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.dismissBtn:hover {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .header {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+  }
+
+  .controls {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .captureBtn {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .photoPreview {
+    padding: 16px;
+    min-height: 300px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .retakeBtn,
+  .submitBtn {
+    width: 100%;
+  }
+
+  .instructions {
+    padding: 16px;
+  }
+
+  .instructions h3 {
+    font-size: 13px;
+  }
+
+  .instructions li {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+  }
+
+  .header {
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .instructions {
+    background: #2d2d44;
+    border-top-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+  }
+
+  .instructions h3 {
+    color: white;
+  }
+
+  .instructions li {
+    color: #b0b0b0;
+  }
+
+  .photoPreview {
+    background: #2d2d44;
+    color: #e0e0e0;
+  }
+
+  .photoInfo {
+    background: #1e1e2e;
+    color: #b0b0b0;
+  }
+
+  .cameraToggle,
+  .galleryBtn {
+    background: #1e1e2e;
+    border-color: #444;
+  }
+
+  .cameraToggle:hover,
+  .galleryBtn:hover {
+    background: #2d2d44;
+  }
+
+  .retakeBtn {
+    background: #1e1e2e;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+
+  .retakeBtn:hover {
+    background: #2d2d44;
+    border-color: #667eea;
+  }
+}

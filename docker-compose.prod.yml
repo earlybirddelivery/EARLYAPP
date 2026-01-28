@@ -1,0 +1,323 @@
+version: '3.9'
+
+services:
+  # Backend Service (Production - Load Balanced)
+  backend:
+    image: ghcr.io/earlybird-emergent/backend:${IMAGE_TAG:-stable}
+    restart: always
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+      - DATABASE_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/kiranast?authSource=admin&ssl=true
+      - REDIS_URL=redis://${REDIS_PASSWORD}@redis:6379/0
+      - JWT_SECRET=${JWT_SECRET}
+      - API_KEY=${API_KEY}
+      - FLASK_APP=server.py
+      - LOG_LEVEL=WARNING
+      - SENTRY_DSN=${SENTRY_DSN}
+    volumes:
+      - backend_logs:/app/logs
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kiranast-network
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 60s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      com.earlybird.service: backend
+      com.earlybird.environment: production
+      com.earlybird.tier: core
+
+  # Frontend Service (Production - CDN Ready)
+  frontend:
+    image: ghcr.io/earlybird-emergent/frontend:${IMAGE_TAG:-stable}
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - REACT_APP_API_URL=https://api.kiranast ore.com
+      - NODE_ENV=production
+    volumes:
+      - ./frontend/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/ssl:/etc/nginx/ssl:ro
+      - frontend_cache:/var/cache/nginx
+      - frontend_logs:/var/log/nginx
+    depends_on:
+      - backend
+    networks:
+      - kiranast-network
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      com.earlybird.service: frontend
+      com.earlybird.environment: production
+      com.earlybird.tier: web
+
+  # MongoDB Database (Production - Replica Set Ready)
+  mongo:
+    image: mongo:6.0
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=kiranast
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+      - mongo_logs:/var/log/mongodb
+      - ./backups:/backups
+      - ./mongo/mongod.prod.conf:/etc/mongod.conf:ro
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    labels:
+      com.earlybird.service: database
+      com.earlybird.environment: production
+      com.earlybird.tier: data
+
+  # Redis Cache (Production - High Availability)
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+      - redis_logs:/var/log/redis
+      - ./redis/redis.prod.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
+    labels:
+      com.earlybird.service: cache
+      com.earlybird.environment: production
+      com.earlybird.tier: data
+
+  # Backup Service (Production - Automated Daily)
+  backup:
+    image: ghcr.io/earlybird-emergent/backup:${IMAGE_TAG:-stable}
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017
+      - BACKUP_DIR=/backups
+      - BACKUP_INTERVAL=86400
+      - BACKUP_RETENTION=30
+      - S3_BUCKET=${S3_BUCKET}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - mongo
+    networks:
+      - kiranast-network
+    labels:
+      com.earlybird.service: backup
+      com.earlybird.environment: production
+
+  # Log Aggregation (Production)
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.0.0
+    restart: always
+    volumes:
+      - ./monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - backend_logs:/app/logs:ro
+      - frontend_logs:/var/log/nginx:ro
+      - mongo_logs:/var/log/mongodb:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: filebeat -e -strict.perms=false
+    networks:
+      - kiranast-network
+    environment:
+      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+      - LOGSTASH_HOSTS=logstash:5000
+    depends_on:
+      - elasticsearch
+    labels:
+      com.earlybird.service: logging
+      com.earlybird.environment: production
+
+  # Elasticsearch (Production)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - kiranast-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      com.earlybird.service: logging
+      com.earlybird.environment: production
+
+  # Kibana (Production Logs Visualization)
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.0.0
+    restart: always
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - kiranast-network
+    labels:
+      com.earlybird.service: logging
+      com.earlybird.environment: production
+
+  # Prometheus Monitoring (Production)
+  prometheus:
+    image: prom/prometheus:latest
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.prod.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - kiranast-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    labels:
+      com.earlybird.service: monitoring
+      com.earlybird.environment: production
+
+  # Grafana Dashboards (Production)
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/dashboards.prod:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/datasources.prod:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - kiranast-network
+    labels:
+      com.earlybird.service: monitoring
+      com.earlybird.environment: production
+
+  # AlertManager (Production Alerts)
+  alertmanager:
+    image: prom/alertmanager:latest
+    restart: always
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+    networks:
+      - kiranast-network
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    labels:
+      com.earlybird.service: monitoring
+      com.earlybird.environment: production
+
+  # Load Balancer (Production - HAProxy)
+  loadbalancer:
+    image: haproxy:2.8-alpine
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./lb/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - kiranast-network
+    depends_on:
+      - backend
+    labels:
+      com.earlybird.service: loadbalancer
+      com.earlybird.environment: production
+
+networks:
+  kiranast-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
+  mongo_config:
+    driver: local
+  mongo_logs:
+    driver: local
+  redis_data:
+    driver: local
+  redis_logs:
+    driver: local
+  backend_logs:
+    driver: local
+  frontend_cache:
+    driver: local
+  frontend_logs:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local

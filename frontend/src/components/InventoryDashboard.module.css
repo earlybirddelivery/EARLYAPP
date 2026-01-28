@@ -1,0 +1,757 @@
+/**
+ * PHASE 4B.4: Inventory Dashboard Styles
+ * Professional styling for inventory management UI
+ */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* ========================================================================
+   HEADER & LAYOUT
+   ======================================================================== */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titleSection h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.titleSection .subtitle {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.refreshControl {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.refreshSelect {
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.refreshSelect:hover {
+  border-color: #2196f3;
+  background-color: #f0f8ff;
+}
+
+/* ========================================================================
+   STATS GRID
+   ======================================================================== */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.statCard {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-left: 4px solid #2196f3;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 5px;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.statSubtext {
+  font-size: 11px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* ========================================================================
+   TABS & NAVIGATION
+   ======================================================================== */
+
+.tabsContainer {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  overflow-x: auto;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  background: none;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+  background: #f5f5f5;
+  color: #2196f3;
+}
+
+.tab.active {
+  color: #2196f3;
+  border-bottom-color: #2196f3;
+}
+
+/* ========================================================================
+   CONTENT AREA & SECTIONS
+   ======================================================================== */
+
+.contentArea {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+}
+
+.tabContent {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  font-size: 18px;
+  color: #1a237e;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* ========================================================================
+   CARDS & ITEMS
+   ======================================================================== */
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.stockCard {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.stockCard:hover {
+  border-color: #2196f3;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.sku {
+  font-size: 11px;
+  color: #999;
+  background: #f5f5f5;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.stockInfo {
+  margin-bottom: 10px;
+}
+
+.stockLevel {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.current {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2196f3;
+}
+
+.unit {
+  font-size: 12px;
+  color: #666;
+}
+
+.stockRange {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s;
+  border-radius: 3px;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.badge {
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.lastUpdate {
+  color: #999;
+}
+
+/* ========================================================================
+   ALERTS & ACTIVITY LOG
+   ======================================================================== */
+
+.alertsPanel,
+.reorderPanel,
+.forecastPanel,
+.analyticsPanel {
+  width: 100%;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.panelHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.alertsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alertItem {
+  display: grid;
+  grid-template-columns: 4px 1fr auto;
+  gap: 15px;
+  align-items: start;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.alertSeverity {
+  border-radius: 2px;
+  min-height: 60px;
+}
+
+.alertContent h4 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.alertType {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.alertContent p {
+  margin: 3px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.timestamp {
+  font-size: 11px;
+  color: #999;
+}
+
+.alertActions {
+  display: flex;
+  gap: 8px;
+}
+
+.acknowledgeForm {
+  grid-column: 2 / -1;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.acknowledgeForm textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ========================================================================
+   BUTTONS & FORMS
+   ======================================================================== */
+
+.btn {
+  padding: 10px 16px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnSecondary {
+  padding: 10px 16px;
+  background: #e0e0e0;
+  color: #666;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btnSecondary:hover {
+  background: #d0d0d0;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.form input,
+.form select {
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+/* ========================================================================
+   REORDER & ACTIVITY
+   ======================================================================== */
+
+.reordersList,
+.topSellersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reorderItem {
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.reorderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reorderHeader h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.reorderDetails p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.activityLog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activityItem {
+  display: flex;
+  gap: 15px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border-left: 3px solid #2196f3;
+}
+
+.activityTime {
+  font-size: 12px;
+  color: #999;
+  min-width: 100px;
+  font-weight: 500;
+}
+
+.activityText {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ========================================================================
+   ANALYTICS
+   ======================================================================== */
+
+.analyticsPanel {
+  width: 100%;
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.analyticsCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.analyticsCard h3 {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.analyticsValue {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.topSellerItem {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  gap: 15px;
+  align-items: center;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.rank {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2196f3;
+  text-align: center;
+}
+
+.productId {
+  font-size: 13px;
+  color: #1a237e;
+  font-weight: 500;
+}
+
+.quantity {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ========================================================================
+   LOADING & EMPTY STATES
+   ======================================================================== */
+
+.loadingSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.emptyState p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* ========================================================================
+   ALERTS & NOTIFICATIONS
+   ======================================================================== */
+
+.errorAlert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #ffebee;
+  color: #d32f2f;
+  border-radius: 8px;
+  border-left: 4px solid #d32f2f;
+  margin-bottom: 20px;
+}
+
+.errorAlert button {
+  background: transparent;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ========================================================================
+   FORECASTING DETAILS
+   ======================================================================== */
+
+.forecastDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.forecastItem {
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.forecastItem label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.forecastItem .value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a237e;
+}
+
+/* ========================================================================
+   RESPONSIVE DESIGN
+   ======================================================================== */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .alertItem {
+    grid-template-columns: 4px 1fr;
+  }
+
+  .alertActions {
+    grid-column: 2;
+    margin-top: 10px;
+  }
+
+  .analyticsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+}

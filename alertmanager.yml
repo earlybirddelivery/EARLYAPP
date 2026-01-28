@@ -1,0 +1,195 @@
+global:
+  resolve_timeout: 5m
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Templates for alert notifications
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Root route configuration
+route:
+  # Default receiver
+  receiver: 'default'
+  
+  # Group alerts by these labels
+  group_by: ['alertname', 'cluster', 'service']
+  
+  # Wait to collect alerts before sending
+  group_wait: 10s
+  
+  # Wait between groups
+  group_interval: 10s
+  
+  # Wait before re-sending
+  repeat_interval: 12h
+  
+  # Sub-routes for specific alerts
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'pagerduty'
+      group_wait: 0s
+      repeat_interval: 5m
+      
+    # Database alerts
+    - match:
+        component: database
+      receiver: 'database-team'
+      group_by: ['alertname', 'instance']
+      continue: true
+      
+    # Payment alerts
+    - match:
+        component: payments
+      receiver: 'payments-team'
+      group_wait: 1m
+      continue: true
+      
+    # Security alerts
+    - match:
+        component: security
+      receiver: 'security-team'
+      group_wait: 0s
+      repeat_interval: 1h
+      continue: true
+      
+    # Infrastructure alerts
+    - match:
+        component: infrastructure
+      receiver: 'ops-team'
+      group_by: ['alertname', 'instance']
+      continue: true
+      
+    # Warning level - batched notification
+    - match:
+        severity: warning
+      receiver: 'slack-warnings'
+      group_wait: 30s
+      repeat_interval: 4h
+
+# Receiver configurations
+receivers:
+  # Default receiver
+  - name: 'default'
+    slack_configs:
+      - channel: '#alerts'
+        title: 'Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+
+  # PagerDuty for critical alerts
+  - name: 'pagerduty'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'
+        description: '{{ .GroupLabels.alertname }}'
+        details:
+          firing: '{{ template "pagerduty.default.instances" .Alerts.Firing }}'
+    slack_configs:
+      - channel: '#critical-alerts'
+        title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: 'danger'
+        actions:
+          - type: button
+            text: 'View Runbook'
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+          - type: button
+            text: 'Resolve in PagerDuty'
+            url: 'https://pagerduty.com'
+
+  # Database team notifications
+  - name: 'database-team'
+    slack_configs:
+      - channel: '#database-alerts'
+        title: 'Database Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+    email_configs:
+      - to: 'db-team@kirana.local'
+        from: 'alertmanager@kirana.local'
+        smarthost: '${SMTP_HOST}:587'
+        auth_username: '${SMTP_USER}'
+        auth_password: '${SMTP_PASSWORD}'
+
+  # Payment team notifications
+  - name: 'payments-team'
+    slack_configs:
+      - channel: '#payments-alerts'
+        title: 'Payment Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: 'danger'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_PAYMENTS_KEY}'
+
+  # Security team notifications
+  - name: 'security-team'
+    slack_configs:
+      - channel: '#security-alerts'
+        title: '🔐 Security Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: 'danger'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SECURITY_KEY}'
+    email_configs:
+      - to: 'security@kirana.local'
+        from: 'alertmanager@kirana.local'
+        smarthost: '${SMTP_HOST}:587'
+        auth_username: '${SMTP_USER}'
+        auth_password: '${SMTP_PASSWORD}'
+
+  # Operations team notifications
+  - name: 'ops-team'
+    slack_configs:
+      - channel: '#ops-alerts'
+        title: 'Infrastructure Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+    email_configs:
+      - to: 'ops@kirana.local'
+        from: 'alertmanager@kirana.local'
+        smarthost: '${SMTP_HOST}:587'
+        auth_username: '${SMTP_USER}'
+        auth_password: '${SMTP_PASSWORD}'
+
+  # Slack warnings channel
+  - name: 'slack-warnings'
+    slack_configs:
+      - channel: '#warnings'
+        title: '⚠️ Warning: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        color: 'warning'
+        thumb_url: 'https://example.com/warning.png'
+
+# Inhibition rules to suppress certain alerts
+inhibit_rules:
+  # Don't alert if parent service is down
+  - source_match:
+      severity: 'critical'
+      alertname: 'ServiceDown'
+    target_match_re:
+      alertname: '.*'
+    equal: ['instance']
+
+  # Suppress warnings if critical alert exists
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+
+  # Suppress disk alerts if node is down
+  - source_match:
+      alertname: 'NodeDown'
+    target_match_re:
+      alertname: 'Disk.*|Memory.*|CPU.*'
+    equal: ['instance']
+
+  # Suppress connection pool alerts if database is down
+  - source_match:
+      alertname: 'MongoDBDown'
+    target_match_re:
+      alertname: 'Database.*|ConnectionPool.*'
+    equal: ['instance']
